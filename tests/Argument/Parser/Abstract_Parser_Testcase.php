@@ -45,7 +45,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 		);
 
 		$model = $this->type_class()::on( 'arg-name' );
-dump([$expected,( new Argument_Parser( $model ) )->to_array()]);
+
 		$this->assertSame(
 			$expected,
 			( new Argument_Parser( $model ) )->to_array()
