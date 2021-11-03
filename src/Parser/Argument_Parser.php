@@ -5,14 +5,20 @@ declare(strict_types=1);
 /**
  * Parses an argument into either array or JSON representations
  *
- * @package PinkCrab\WP_Rest_Schema\Route
+ * @package PinkCrab\WP_Rest_Schema
  * @author Glynn Quelch glynn@pinkcrab.co.uk
- * @since 1.1.0
+ * @since 0.1.0
  */
 
-namespace PinkCrab\WP_Rest_Schema\Argument;
+namespace PinkCrab\WP_Rest_Schema\Parser;
 
 use PinkCrab\WP_Rest_Schema\Argument\Argument;
+use PinkCrab\WP_Rest_Schema\Argument\Array_Type;
+use PinkCrab\WP_Rest_Schema\Argument\Number_Type;
+use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
+use PinkCrab\WP_Rest_Schema\Argument\String_Type;
+use PinkCrab\WP_Rest_Schema\Argument\Integer_Type;
+use PinkCrab\WP_Rest_Schema\Parser\Array_Attribute_Parser;
 
 class Argument_Parser {
 
@@ -43,8 +49,21 @@ class Argument_Parser {
 	 * @return array<string, mixed>
 	 */
 	public function to_array(): array {
-		$attributes = array();
+		return array(
+			$this->argument->get_key() => array_merge(
+				$this->shared_attributes(),
+				$this->get_type_attributes()
+			),
+		);
+	}
 
+	/**
+	 * Sets all populated shared attributes to an array.
+	 *
+	 * @param array<string, mixed> $attributes
+	 * @return array<string, mixed>
+	 */
+	public function shared_attributes( array $attributes = array() ): array {
 		if ( $this->argument->get_validation() ) {
 			$attributes['validate_callback'] = $this->argument->get_validation();
 		}
@@ -81,7 +100,7 @@ class Argument_Parser {
 			$attributes['enum'] = $this->argument->get_expected();
 		}
 
-		return array( $this->argument->get_key() => array_merge( $attributes, $this->get_type_attributes() ) );
+		return $attributes;
 	}
 
 	/**
@@ -98,14 +117,14 @@ class Argument_Parser {
 	protected function get_type_attributes(): array {
 		switch ( $this->argument->get_type() ) {
 			case Argument::TYPE_STRING:
-				return $this->string_attributes();
+				return String_Attribute_Parser::parse( $this->argument );
 
 			case Argument::TYPE_NUMBER:
 			case Argument::TYPE_INTEGER:
 				return $this->numeric_attributes();
 
 			case Argument::TYPE_ARRAY:
-				return $this->array_attributes();
+				return Array_Attribute_Parser::parse( $this->argument );
 
 			case Argument::TYPE_OBJECT:
 				return $this->object_attributes();
@@ -115,33 +134,7 @@ class Argument_Parser {
 		}
 	}
 
-	/**
-	 * Populate string args.
-	 *
-	 * @return array<string, int|string>
-	 */
-	protected function string_attributes(): array {
 
-		// Bail if not a String Argument.
-		if ( ! is_a( $this->argument, String_Type::class ) ) {
-			return array();
-		}
-
-		/** @var String_Type $argument */
-		$argument = $this->argument;
-
-		$attributes = array();
-		if ( ! is_null( $argument->get_min_length() ) ) {
-			$attributes['minLength'] = $argument->get_min_length();
-		}
-		if ( ! is_null( $argument->get_max_length() ) ) {
-			$attributes['maxLength'] = $argument->get_max_length();
-		}
-		if ( ! is_null( $argument->get_pattern() ) ) {
-			$attributes['pattern'] = $argument->get_pattern();
-		}
-		return $attributes;
-	}
 
 	/**
 	 * Populate number and integer args.
@@ -182,76 +175,7 @@ class Argument_Parser {
 		return $attributes;
 	}
 
-	/**
-	 * Populate Array args
-	 *
-	 * @return array<string, int|float|bool|mixed[]>
-	 */
-	public function array_attributes(): array {
-		// Bail if not a String Argument.
-		if ( ! is_a( $this->argument, Array_Type::class ) ) {
-			return array();
-		}
 
-		/** @var Array_Type $argument */
-		$argument = $this->argument;
-
-		$attributes = array();
-
-		// Map items.
-		$items = $this->parse_array_items( $argument );
-		if ( ! empty( $items ) ) {
-			// Based on relationship type.
-			$relationship        = $argument->get_relationship();
-			$attributes['items'] = 'allOf' === $relationship
-				? $items
-				: array( $relationship => $items );
-		}
-
-		// Min items
-		if ( ! is_null( $argument->get_min_items() ) ) {
-			$attributes['minItems'] = $argument->get_min_items();
-		}
-
-		// Max items
-		if ( ! is_null( $argument->get_max_items() ) ) {
-			$attributes['maxItems'] = $argument->get_max_items();
-		}
-
-		// Unique items
-		if ( ! is_null( $argument->get_unique_items() ) ) {
-			$attributes['uniqueItems'] = $argument->get_unique_items();
-		}
-
-		return $attributes;
-	}
-
-	/**
-	 * Parses the arrays items
-	 *
-	 * @param Array_Type $argument
-	 * @return array<int, mixed>
-	 */
-	protected function parse_array_items( Array_Type $argument ) : array {
-		$items = array();
-
-		if ( ! $argument->has_items() ) {
-			return $items;
-		}
-
-		// If we only have 1 item, return as a simple array.
-		if ( $argument->item_count() === 1 ) {
-			$parser = new self( array_values( $argument->get_items() )[0] ); /** @phpstan-ignore-line, already checked if contains items.*/
-			$items  = array_values( $parser->to_array() )[0];
-		} else {
-			foreach ( $argument->get_items() ?? array() as $key => $value ) {
-				$parser = new self( $value );
-				$items  = array_merge( $items, array_values( $parser->to_array() ) );
-			}
-		}
-
-		return $items;
-	}
 
 	/**
 	 * Populate Object args
@@ -310,4 +234,3 @@ class Argument_Parser {
 	}
 
 }
-
