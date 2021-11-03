@@ -273,7 +273,7 @@ class Argument_Parser {
 		$properties = $this->parse_object_properties( $argument );
 		if ( ! empty( $properties ) ) {
 			// Based on relationship type.
-			$relationship        = $argument->get_relationship();
+			$relationship             = $argument->get_relationship();
 			$attributes['properties'] = 'allOf' === $relationship
 				? $properties
 				: array( $relationship => $properties );
@@ -287,7 +287,7 @@ class Argument_Parser {
 	 *
 	 * @param Object_Type $argument
 	 * @param string $property_type
-	 * @return array<int, mixed>
+	 * @return array<string, mixed>
 	 */
 	public function parse_object_properties( Object_Type $argument, string $property_type = 'regular' ): array {
 		switch ( $property_type ) {
@@ -307,8 +307,6 @@ class Argument_Parser {
 			},
 			$properties
 		);
-
-		return $properties;
 	}
 
 }
