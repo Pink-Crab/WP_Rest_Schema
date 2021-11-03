@@ -1,0 +1,51 @@
+{
+    "name": "pinkcrab/function-constructors",
+    "type": "library",
+    "description": "A collection of functions to make working with the standard php library a little easier for function composition. Allows the creation of partially applied library functions, to work as close to pure fucntions as possible.",
+    "keywords": [
+        "FP",
+        "Partial Application",
+        "Currying",
+        "Piping",
+        "Functional"
+    ],
+    "homepage": "https://pinkcrab.co.uk",
+    "license": "MIT",
+    "authors": [{
+        "name": "Glynn Quelch",
+        "email": "glynn.quelch@pinkcrab.co.uk",
+        "homepage": "http://clappo.co.uk",
+        "role": "Developer"
+    }],
+    "autoload": {
+        "psr-4": {
+            "PinkCrab\\FunctionConstructors\\": "src"
+        },
+        "files": [
+            "src/constants.php",
+            "src/procedural.php",
+            "src/arrays.php",
+            "src/comparisons.php",
+            "src/general.php",
+            "src/strings.php",
+            "src/numbers.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PinkCrab\\FunctionConstructors\\Tests\\": "Tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7",
+        "yoast/phpunit-polyfills": "^0.1.0",
+        "phpstan/phpstan": "^0.12.6"
+    },
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "analyse": "vendor/bin/phpstan analyse src -l8"
+    }
+}

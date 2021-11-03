@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * Collection of constants that can be used on specific functions.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @author Glynn Quelch <glynn.quelch@gmail.com>
+ * @license http://www.opensource.org/licenses/mit-license.html  MIT License
+ * @package PinkCrab\FunctionConstructors
+ */
+
+/**
+ * Constants used for Str\wordCount() => str_word_count()
+ * https://www.php.net/manual/en/function.str-word-count.php
+ */
+if (!defined('WORD_COUNT_NUMBER_OF_WORDS')) {
+    define('WORD_COUNT_NUMBER_OF_WORDS', 0);
+}
+if (!defined('WORD_COUNT_ARRAY')) {
+    define('WORD_COUNT_ARRAY', 1);
+}
+if (!defined('WORD_COUNT_ASSOCIATIVE_ARRAY')) {
+    define('WORD_COUNT_ASSOCIATIVE_ARRAY', 2);
+}
+
+// String function flags
+if (!defined('STRINGS_CASE_INSENSITIVE')) {
+    define('STRINGS_CASE_INSENSITIVE', 0x1);
+}
+if (!defined('STRINGS_CASE_SENSITIVE')) {
+    define('STRINGS_CASE_SENSITIVE', 0x2);
+}
+if (!defined('STRINGS_BEFORE_NEEDLE')) {
+    define('STRINGS_BEFORE_NEEDLE', 0x4);
+}
+if (!defined('STRINGS_AFTER_NEEDLE')) {
+    define('STRINGS_AFTER_NEEDLE', 0x8);
+}
