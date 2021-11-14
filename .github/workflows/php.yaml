@@ -38,8 +38,10 @@ jobs:
           ini-values: post_max_size=256M, log_errors=1
           tools: pecl
 
-      - name: Install PCOV
-        run: pecl install pcov
+      - name: Setup PCOV
+        run: |
+          composer require pcov/clobber
+          vendor/bin/pcov clobber
       
       - name: Check PHP Version
         run: php -v
