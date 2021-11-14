@@ -39,10 +39,7 @@ jobs:
           tools: pecl
           coverage: pcov
 
-      - name: Setup PCOV
-        run: |
-          composer require pcov/clobber
-          vendor/bin/pcov clobber
+      
       
       - name: Check PHP Version
         run: php -v
@@ -56,6 +53,12 @@ jobs:
       - name: Install dependencies
         run: composer clearcache && rm -rf composer.lock && composer install --prefer-dist --no-suggest
 
+      - name: Setup PCOV
+        run: |
+          composer require pcov/clobber
+          vendor/bin/pcov clobber
+
+        
       - name: Run Tests
         env:
           environment_github: true
