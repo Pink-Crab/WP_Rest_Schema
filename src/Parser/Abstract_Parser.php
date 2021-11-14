@@ -35,6 +35,7 @@ abstract class Abstract_Parser {
 	 */
 	public static function parse( Argument $argument ): array {
 		$class = get_called_class();
+		// @phpstan-ignore-next-line
 		return ( new $class( $argument ) )->parse_attributes();
 	}
 

@@ -77,12 +77,10 @@ class Array_Attribute_Parser extends Abstract_Parser {
 
 		// If we only have 1 item, return as a simple array.
 		if ( $argument->item_count() === 1 ) {
-			$parser = new Argument_Parser( array_values( $argument->get_items() )[0] ); /** @phpstan-ignore-line, already checked if contains items.*/
-			$items  = array_values( $parser->to_array() )[0];
+			$items = Argument_Parser::as_list( array_values( $argument->get_items() )[0] ); // @phpstan-ignore-line, already checked if array empty.
 		} else {
 			foreach ( $argument->get_items() ?? array() as $key => $value ) {
-				$parser = new Argument_Parser( $value );
-				$items  = array_merge( $items, array_values( $parser->to_array() ) );
+				$items[] = Argument_Parser::as_list( $value );
 			}
 		}
 

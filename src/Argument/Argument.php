@@ -122,6 +122,13 @@ class Argument {
 	 */
 	protected $expected;
 
+	/**
+	 * The arguments context
+	 *
+	 * @var array
+	 */
+	protected $context = array();
+
 
 	public function __construct( string $key ) {
 		$this->key = $key;
@@ -422,4 +429,24 @@ class Argument {
 		return $this->add_attribute( 'name', $name );
 	}
 
+
+	/**
+	 * Get the arguments context
+	 *
+	 * @returnarray
+	 */
+	public function get_context() {
+		 return $this->context;
+	}
+
+	/**
+	 * Set the arguments context
+	 *
+	 * @param string ...$context  The arguments context
+	 * @return static
+	 */
+	public function context( ...$context ) {
+		$this->context = array_merge( $this->context, $context );
+		return $this;
+	}
 }

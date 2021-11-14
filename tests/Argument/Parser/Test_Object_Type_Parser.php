@@ -55,7 +55,7 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 

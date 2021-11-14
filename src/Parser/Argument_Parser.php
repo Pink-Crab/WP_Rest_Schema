@@ -13,10 +13,8 @@ declare(strict_types=1);
 namespace PinkCrab\WP_Rest_Schema\Parser;
 
 use PinkCrab\WP_Rest_Schema\Argument\Argument;
-use PinkCrab\WP_Rest_Schema\Argument\Array_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Number_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
-use PinkCrab\WP_Rest_Schema\Argument\String_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Integer_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Array_Attribute_Parser;
 
@@ -34,26 +32,67 @@ class Argument_Parser {
 	}
 
 	/**
-	 * Static constructor with array output
+	 * Static helpers
+	 */
+
+	/**
+	 * Static constructor with array output with argument key as array keys.
 	 *
 	 * @param \PinkCrab\WP_Rest_Schema\Argument\Argument $argument
 	 * @return array<string, mixed>
 	 */
 	public static function as_array( Argument $argument ): array {
-		return ( new self( $argument ) )->to_array();
+		return ( new self( $argument ) )->parse_as_indexed_array();
 	}
 
 	/**
-	 * Returns the current argument as an array
+	 * Static constructor with array output without keys, just a list.
+	 *
+	 * @param \PinkCrab\WP_Rest_Schema\Argument\Argument $argument
+	 * @return mixed[]
+	 */
+	public static function as_list( Argument $argument ): array {
+		return ( new self( $argument ) )->parse_as_list();
+	}
+
+	/**
+	 * Lazy static method for rendering schema for a meta data.
+	 * Wrapper for self::as_list()
+	 *
+	 * @param \PinkCrab\WP_Rest_Schema\Argument\Argument $argument
+	 * @return mixed[]
+	 */
+	public static function for_meta_data( Argument $argument ): array {
+		return self::as_list( $argument );
+	}
+
+	/**
+	 * Output types.
+	 */
+
+	/**
+	 * Returns the current argument as an array with the argument key as array key.
 	 *
 	 * @return array<string, mixed>
 	 */
-	public function to_array(): array {
+	public function parse_as_indexed_array(): array {
 		return array(
 			$this->argument->get_key() => array_merge(
 				$this->shared_attributes(),
 				$this->get_type_attributes()
 			),
+		);
+	}
+
+	/**
+	 * Returns the current as an array without a key.
+	 *
+	 * @return mixed[]
+	 */
+	public function parse_as_list(): array {
+		return array_merge(
+			$this->shared_attributes(),
+			$this->get_type_attributes()
 		);
 	}
 
@@ -65,7 +104,7 @@ class Argument_Parser {
 	 */
 	public function shared_attributes( array $attributes = array() ): array {
 		if ( $this->argument->get_validation() ) {
-			$attributes['validate_callback'] = $this->argument->get_validation();
+			$attributes['arg_options']['validate_callback'] = $this->argument->get_validation();
 		}
 
 		if ( $this->argument->get_sanitization() ) {
@@ -98,6 +137,10 @@ class Argument_Parser {
 
 		if ( is_array( $this->argument->get_expected() ) && ! empty( $this->argument->get_expected() ) ) {
 			$attributes['enum'] = $this->argument->get_expected();
+		}
+
+		if ( is_array( $this->argument->get_context() ) && ! empty( $this->argument->get_context() ) ) {
+			$attributes['context'] = $this->argument->get_context();
 		}
 
 		return $attributes;
@@ -227,7 +270,7 @@ class Argument_Parser {
 
 		return array_map(
 			function( $property ): array {
-				return array_values( ( new self( $property ) )->to_array() )[0];
+				return ( new self( $property ) )->parse_as_list();
 			},
 			$properties
 		);

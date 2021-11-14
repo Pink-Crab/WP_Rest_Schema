@@ -23,7 +23,7 @@ To install, you can use composer
 ```bash
 $ composer require pinkcrab/wp-rest-schema-builder
 ```
-
+for_meta_data
 ## Basic Usage ##
 
 > This can be used for Register Post Meta
@@ -32,8 +32,8 @@ register_post_meta( 'post', 'fixed_in', array(
     'type'         => 'string',
     'show_in_rest' => array(
         'single' => true,
-        'schema' => Argument_Parser::as_array(
-            String_Type::on( 'string-arg' )
+        'schema' => Argument_Parser::for_meta_data(
+            String_Type::on('fixed_in')
                 ->min_length(10)
                 ->max_length( 42 )
                 ->required()
@@ -44,16 +44,18 @@ register_post_meta( 'post', 'fixed_in', array(
 ```
 > Can also be used with the [Perique Registerable](https://github.com/Pink-Crab/Perique-Registerables) library
 ```php
-    $meta_data = new Meta_Data('key');
-    $meta_data->rest_schema(
-        Argument_Parser::as_array(
-            String_Type::on( 'string-arg' )
-                ->min_length(10)
-                ->max_length( 42 )
-                ->required()
-                ->description('This is a required string value, that must be between 10 and 42 chars long.')
-        )
-    );
+    $meta_data = (new Meta_Data('fixed_in'))
+        ->post_type('post')
+        ->type('string')
+        ->rest_schema(
+            Argument_Parser::for_meta_data(
+                String_Type::on( 'fixed_in' )
+                    ->min_length(10)
+                    ->max_length( 42 )
+                    ->required()
+                    ->description('This is a required string value, that must be between 10 and 42 chars long.')
+            )
+        );
 ```
 
 

@@ -53,7 +53,7 @@ class Test_String_Type_Parser extends Abstract_Parser_Testcase {
 		$model = String_Type::on( 'string-arg' )->min_length( 4 );
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 
@@ -69,7 +69,7 @@ class Test_String_Type_Parser extends Abstract_Parser_Testcase {
 		$model = String_Type::on( 'string-arg' )->max_length( 42 );
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 
@@ -86,7 +86,7 @@ class Test_String_Type_Parser extends Abstract_Parser_Testcase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 }

@@ -53,7 +53,7 @@ class Test_Integer_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Integer_Type::on( 'int-arg' )->minimum( 5 );
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 
@@ -69,7 +69,7 @@ class Test_Integer_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Integer_Type::on( 'int-arg' )->exclusive_minimum();
 		$this->assertSame(
 			$expected_without,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 
 		$expected_with = array(
@@ -83,7 +83,7 @@ class Test_Integer_Type_Parser extends Abstract_Parser_Testcase {
 		$model->minimum( 8 );
 		$this->assertSame(
 			$expected_with,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 
@@ -99,7 +99,7 @@ class Test_Integer_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Integer_Type::on( 'int-arg' )->exclusive_maximum();
 		$this->assertSame(
 			$expected_without,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 
 		$expected_with = array(
@@ -113,7 +113,7 @@ class Test_Integer_Type_Parser extends Abstract_Parser_Testcase {
 		$model->maximum( 897 );
 		$this->assertSame(
 			$expected_with,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 
@@ -129,7 +129,7 @@ class Test_Integer_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Integer_Type::on( 'int-arg' )->maximum( 798 );
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 
@@ -145,7 +145,7 @@ class Test_Integer_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Integer_Type::on( 'int-arg' )->multiple_of( 0.5 );
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 }

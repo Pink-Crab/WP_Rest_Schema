@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Abstract class for parsing type specific attributes.
+ * String attribute parser.
  *
  * @package PinkCrab\WP_Rest_Schema
  * @author Glynn Quelch glynn@pinkcrab.co.uk
@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\WP_Rest_Schema\Parser;
 
-use PinkCrab\WP_Rest_Schema\Parser\Abstract_Parser;
 use PinkCrab\WP_Rest_Schema\Argument\String_Type;
+use PinkCrab\WP_Rest_Schema\Parser\Abstract_Parser;
 
 class String_Attribute_Parser extends Abstract_Parser {
 
