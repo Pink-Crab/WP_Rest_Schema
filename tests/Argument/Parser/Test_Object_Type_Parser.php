@@ -20,14 +20,14 @@ declare(strict_types=1);
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\WP_Rest_Schema
- * @since 1.1.0
+ * @since 0.1.0
  *
  */
 
 namespace PinkCrab\WP_Rest_Schema\Tests\Argument\Parser;
 
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
-use PinkCrab\WP_Rest_Schema\Argument\Argument_Parser;
+use PinkCrab\WP_Rest_Schema\Parser\Argument_Parser;
 use PinkCrab\WP_Rest_Schema\Tests\Argument\Parser\Abstract_Parser_Testcase;
 
 class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
@@ -55,7 +55,7 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array ($model )
 		);
 	}
 

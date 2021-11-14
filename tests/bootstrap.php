@@ -21,3 +21,11 @@ tests_add_filter(
 // Start up the WP testing environment.
 require getenv( 'WP_PHPUNIT__DIR' ) . '/includes/bootstrap.php';
 
+if ( ! defined( 'XDEBUG_CC_DEAD_CODE' ) ) {
+	define( 'XDEBUG_CC_DEAD_CODE', null );
+}
+
+if ( ! defined( 'XDEBUG_CC_UNUSED' ) ) {
+	define( 'XDEBUG_CC_UNUSED', null );
+}
+

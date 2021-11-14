@@ -5,9 +5,9 @@ declare(strict_types=1);
 /**
  * A route argument definition.
  *
- * @package PinkCrab\WP_Rest_Schema\Route
+ * @package PinkCrab\WP_Rest_Schema
  * @author Glynn Quelch glynn@pinkcrab.co.uk
- * @since 1.1.0
+ * @since 0.1.0
  */
 
 namespace PinkCrab\WP_Rest_Schema\Argument;
@@ -121,6 +121,13 @@ class Argument {
 	 * @var array<string|float|int|bool>|null
 	 */
 	protected $expected;
+
+	/**
+	 * The arguments context
+	 *
+	 * @var string[]
+	 */
+	protected $context = array();
 
 
 	public function __construct( string $key ) {
@@ -422,4 +429,24 @@ class Argument {
 		return $this->add_attribute( 'name', $name );
 	}
 
+
+	/**
+	 * Get the arguments context
+	 *
+	 * @return string[]
+	 */
+	public function get_context() {
+		return $this->context;
+	}
+
+	/**
+	 * Set the arguments context
+	 *
+	 * @param string ...$context  The arguments context
+	 * @return static
+	 */
+	public function context( ...$context ) {
+		$this->context = array_merge( $this->context, $context );
+		return $this;
+	}
 }

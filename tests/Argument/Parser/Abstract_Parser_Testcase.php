@@ -22,7 +22,7 @@ declare(strict_types=1);
  * @author Glynn Quelch <glynn.quelch@gmail.com>
  * @license http://www.opensource.org/licenses/mit-license.html  MIT License
  * @package PinkCrab\WP_Rest_Schema
- * @since 1.1.0
+ * @since 0.1.0
  *
  */
 
@@ -30,8 +30,7 @@ namespace PinkCrab\WP_Rest_Schema\Tests\Argument\Parser;
 
 use WP_UnitTestCase;
 use PinkCrab\WP_Rest_Schema\Argument\Argument;
-use PinkCrab\WP_Rest_Schema\Argument\String_Type;
-use PinkCrab\WP_Rest_Schema\Argument\Argument_Parser;
+use PinkCrab\WP_Rest_Schema\Parser\Argument_Parser;
 
 abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
@@ -48,7 +47,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -70,7 +69,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -92,7 +91,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -110,7 +109,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -128,7 +127,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -146,7 +145,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -164,7 +163,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -182,7 +181,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -200,7 +199,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -222,7 +221,7 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
@@ -234,8 +233,8 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$expected = array(
 			'arg-name' => array(
-				'validate_callback' => $callback,
-				'type'              => $this->type_name(),
+				'arg_options' => array( 'validate_callback' => $callback ),
+				'type'        => $this->type_name(),
 			),
 		);
 
@@ -244,17 +243,17 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			$expected,
-			( new Argument_Parser( $model ) )->to_array()
+			Argument_Parser::as_array( $model )
 		);
 	}
 
-    /** @testdox It should be possible to use a simple static method to construct and export as an array in WP Rest Schema format. */
+	/** @testdox It should be possible to use a simple static method to construct and export as an array in WP Rest Schema format. */
 	public function test_static_to_array_shortcut(): void {
 		$model = $this->type_class()::on( 'arg-name' )
 			->expected( 'one', 'two' );
 
 		$this->assertSame(
-			( new Argument_Parser( $model ) )->to_array(),
+			( new Argument_Parser( $model ) )->parse_as_indexed_array(),
 			Argument_Parser::as_array( $model )
 		);
 	}
