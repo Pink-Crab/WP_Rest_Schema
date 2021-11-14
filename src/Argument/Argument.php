@@ -125,7 +125,7 @@ class Argument {
 	/**
 	 * The arguments context
 	 *
-	 * @var array
+	 * @var string[]
 	 */
 	protected $context = array();
 
@@ -433,10 +433,10 @@ class Argument {
 	/**
 	 * Get the arguments context
 	 *
-	 * @returnarray
+	 * @return string[]
 	 */
 	public function get_context() {
-		 return $this->context;
+		return $this->context;
 	}
 
 	/**

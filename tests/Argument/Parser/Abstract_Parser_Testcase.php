@@ -233,8 +233,8 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$expected = array(
 			'arg-name' => array(
-				'validate_callback' => $callback,
-				'type'              => $this->type_name(),
+				'arg_options' => array( 'validate_callback' => $callback ),
+				'type'        => $this->type_name(),
 			),
 		);
 

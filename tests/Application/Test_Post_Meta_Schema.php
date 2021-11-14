@@ -30,6 +30,7 @@ use WP_UnitTestCase;
 use PinkCrab\WP_Rest_Schema\Argument\Array_Type;
 use PinkCrab\WP_Rest_Schema\Tests\HTTP_TestCase;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
+use PinkCrab\WP_Rest_Schema\Argument\String_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Integer_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Argument_Parser;
 
@@ -196,7 +197,6 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 		$this->assertEquals( 400, $response['data']['status'] );
 		$this->assertEquals( 'rest_not_in_enum', $response['code'] );
 		$this->assertEquals( 'meta.object_meta[integer] is not one of 1, 2, and 4.', $response['message'] );
-		// dump( $response );
 
 		// Test can create post
 		$response = $dispatch(
@@ -207,11 +207,73 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 		);
 		$this->assertEquals(201, $response->get_status());
 		$data = $response->get_data();
-		dump($data['meta']);
 		$this->assertArrayHasKey('object_meta', $data['meta']);
 		$this->assertEquals(4, $data['meta']['object_meta']['integer']);
 		$this->assertEquals(true, $data['meta']['object_meta']['boolean']);
-		// $this->assertContains('c', $data['meta']['my_meta']);
+	}
+
+	public function test_post_string()
+	{
+		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
+		$user    = wp_set_current_user( $user_id );
+		$schema  = Argument_Parser::for_meta_data(
+			String_Type::on('string_meta')
+				->required()
+				->default('missing')
+				->min_length(2)
+				->max_length(12)
+				->context('view', 'edit', 'embed')
+		);
+
+		register_meta(
+			'post',
+			'string_meta',
+			array(
+				'single'       => true,
+				'type'         => 'object',
+				'show_in_rest' => array(
+					'schema' => $schema,
+				),
+			)
+		);
+
+		$this->register_routes();
+
+		// Dispatch request,
+		$dispatch = function( $string ): \WP_REST_Response {
+			return $this->dispatch_request(
+				'POST',
+				'/wp/v2/posts',
+				array(),
+				function( $request ) use ( $string ) {
+					$request->set_header( 'content-type', 'application/json' );
+					$request->set_body(
+						json_encode(
+							array(
+								'title'   => 'title',
+								'content' => 'content',
+								'status'  => 'publish',
+								'meta'    => array(
+									'string_meta' => $string,
+								),
+							)
+						)
+					);
+					return $request;
+				}
+			);
+		};
+		$dispatch('ggg');
+		
+		$dispatch = function( $string ): \WP_REST_Response {
+			return $this->dispatch_request(
+				'GET',
+				'/wp/v2/posts/4',
+				array()
+			);
+		};
+
+		dump($schema, $dispatch('ggg')->get_data()/* , $dispatch('ggg')->get_data() */);
 
 	}
 }
