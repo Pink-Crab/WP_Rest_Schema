@@ -37,6 +37,7 @@ jobs:
           extensions: mbstring, intl
           ini-values: post_max_size=256M, log_errors=1
           tools: pecl
+          coverage: pcov
 
       - name: Setup PCOV
         run: |
@@ -53,7 +54,7 @@ jobs:
         run: composer validate
 
       - name: Install dependencies
-        run: vendor/bin/pcov clobber && composer clearcache && rm -rf composer.lock && composer install --prefer-dist --no-suggest
+        run: composer clearcache && rm -rf composer.lock && composer install --prefer-dist --no-suggest
 
       - name: Run Tests
         env:
