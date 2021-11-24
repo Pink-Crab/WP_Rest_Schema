@@ -1,7 +1,7 @@
 {
-    "name": "pinkcrab/perique-route",
+    "name": "pinkcrab/wp-rest-schema",
     "type": "library",
-    "description": "WP REST Endpoint creation library for the Perique Framework.",
+    "description": "Library for writing WP Json Rest Schema",
     "keywords": [],
     "homepage": "https://pinkcrab.co.uk",
     "license": "MIT",
