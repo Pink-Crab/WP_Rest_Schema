@@ -118,7 +118,7 @@ class Argument_Parser {
 	 */
 	public function shared_attributes( array $attributes = array() ): array {
 		if ( $this->argument->get_validation() ) {
-			$attributes['arg_options']['validate_callback'] = $this->argument->get_validation();
+			$attributes['validate_callback'] = $this->argument->get_validation();
 		}
 
 		if ( $this->argument->get_sanitization() ) {
