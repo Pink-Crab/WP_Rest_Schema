@@ -190,6 +190,24 @@ class Object_Type extends Argument {
 	}
 
 	/**
+	 * Checks if any properties defined.
+	 *
+	 * @return bool
+	 */
+	public function has_properties(): bool {
+		return ! empty( $this->properties );
+	}
+
+	/**
+	 * Gets the count of properties.
+	 *
+	 * @return int
+	 */
+	public function count_properties(): int {
+		return count( $this->properties );
+	}
+
+	/**
 	 * ADDITIONAL PROPERTIES
 	 */
 
@@ -285,7 +303,7 @@ class Object_Type extends Argument {
 	}
 
 	/**
-	 * Gets all the addition properties for the object.
+	 * Gets all the additional properties for the object.
 	 *
 	 * @return array<string, Argument>
 	 */
@@ -293,8 +311,26 @@ class Object_Type extends Argument {
 		return $this->additional_properties;
 	}
 
-		/**
-	 * ADDITIONAL PROPERTIES
+	/**
+	 * Checks if any additional properties defined.
+	 *
+	 * @return bool
+	 */
+	public function has_additional_properties(): bool {
+		return ! empty( $this->additional_properties );
+	}
+
+	/**
+	 * Gets the count of additional properties.
+	 *
+	 * @return int
+	 */
+	public function count_additional_properties(): int {
+		return count( $this->additional_properties );
+	}
+
+	/**
+	 * PATTERN PROPERTIES
 	 */
 
 	/**
@@ -389,11 +425,29 @@ class Object_Type extends Argument {
 	}
 
 	/**
-	 * Gets all the addition properties for the object.
+	 * Gets all the pattern properties for the object.
 	 *
 	 * @return array<string, Argument>
 	 */
 	public function get_pattern_properties(): array {
 		return $this->pattern_properties;
+	}
+
+	/**
+	 * Checks if any pattern properties defined.
+	 *
+	 * @return bool
+	 */
+	public function has_pattern_properties(): bool {
+		return ! empty( $this->pattern_properties );
+	}
+
+	/**
+	 * Gets the count of pattern properties.
+	 *
+	 * @return int
+	 */
+	public function count_pattern_properties(): int {
+		return count( $this->pattern_properties );
 	}
 }

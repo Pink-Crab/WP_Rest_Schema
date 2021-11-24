@@ -17,6 +17,7 @@ use PinkCrab\WP_Rest_Schema\Argument\Number_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Integer_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Array_Attribute_Parser;
+use PinkCrab\WP_Rest_Schema\Parser\Object_Attribute_Parser;
 
 class Argument_Parser {
 
@@ -53,6 +54,19 @@ class Argument_Parser {
 	 */
 	public static function as_list( Argument $argument ): array {
 		return ( new self( $argument ) )->parse_as_list();
+	}
+
+	/**
+	 * Static constructor with a single argument output.
+	 *
+	 * @param \PinkCrab\WP_Rest_Schema\Argument\Argument $argument
+	 * @return mixed[]
+	 */
+	public static function as_single( Argument $argument ): array {
+		$parsed = ( new self( $argument ) )->parse_as_indexed_array();
+		return count( $parsed ) < 1
+			? array()
+			: reset( $parsed );
 	}
 
 	/**
@@ -170,7 +184,7 @@ class Argument_Parser {
 				return Array_Attribute_Parser::parse( $this->argument );
 
 			case Argument::TYPE_OBJECT:
-				return $this->object_attributes();
+				return Object_Attribute_Parser::parse( $this->argument );
 
 			default:
 				return array();

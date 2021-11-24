@@ -81,7 +81,6 @@ class Test_Array_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Array_Type::on( 'arg-name' )
 			->string_item()
 			->null_item();
-			dump( array($model, $expected, Argument_Parser::as_array( $model ) ) );
 
 		$this->assertSame(
 			$expected,

@@ -40,23 +40,38 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 		return 'object';
 	}
 
+	/** @testdox It should be possible to parse any properties defined */
 	public function test_can_parse_regular_properties(): void {
 		$expected = array(
 			'arg-name' => array(
 				'type'       => 'object',
 				'properties' => array(
-					'foo' => array( 'type' => 'string', 'name' => 'foo' ),
+					'foo' => array(
+						'type' => 'string',
+						'name' => 'foo',
+					),
+					'bar' => array(
+						'type' => 'boolean',
+						'name' => 'bar',
+					),
 				),
 			),
 		);
 
 		$model = Object_Type::on( 'arg-name' )
-			->string_property('foo');
-
+			->string_property( 'foo' )
+			->boolean_property( 'bar' );
+		dump($model);
+dump(Argument_Parser::as_array( $model ));
 		$this->assertSame(
 			$expected,
-			Argument_Parser::as_array ($model )
+			Argument_Parser::as_array( $model )
 		);
+	}
+
+	public function test(Type $var = null)
+	{
+		# code...
 	}
 
 }

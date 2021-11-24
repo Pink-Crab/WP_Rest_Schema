@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /**
- * Abstract class for parsing type specific attributes.
+ * Array Type parser
  *
  * @package PinkCrab\WP_Rest_Schema
  * @author Glynn Quelch glynn@pinkcrab.co.uk
@@ -12,8 +12,8 @@ declare(strict_types=1);
 
 namespace PinkCrab\WP_Rest_Schema\Parser;
 
-use PinkCrab\WP_Rest_Schema\Parser\Abstract_Parser;
 use PinkCrab\WP_Rest_Schema\Argument\Array_Type;
+use PinkCrab\WP_Rest_Schema\Parser\Abstract_Parser;
 
 
 class Array_Attribute_Parser extends Abstract_Parser {
@@ -24,7 +24,7 @@ class Array_Attribute_Parser extends Abstract_Parser {
 	 * @return array<string, int|float|bool|mixed[]>
 	 */
 	public function parse_attributes(): array {
-		// Bail if not a String Argument.
+		// Bail if not a Array Argument.
 		if ( ! is_a( $this->argument, Array_Type::class ) ) {
 			return array();
 		}
