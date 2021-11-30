@@ -53,11 +53,11 @@ class Test_String_Type_Parser extends Abstract_Parser_Testcase {
 		$model = String_Type::on( 'string-arg' )->min_length( 4 );
 		$this->assertSame(
 			$expected,
-			Argument_Parser::as_array ($model )
+			Argument_Parser::as_array( $model )
 		);
 	}
 
-    /** @testdox When parsing a string argument, it should be possible to set the max length.,  */
+	/** @testdox When parsing a string argument, it should be possible to set the max length.,  */
 	public function test_string_max_length(): void {
 		$expected = array(
 			'string-arg' => array(
@@ -69,15 +69,15 @@ class Test_String_Type_Parser extends Abstract_Parser_Testcase {
 		$model = String_Type::on( 'string-arg' )->max_length( 42 );
 		$this->assertSame(
 			$expected,
-			Argument_Parser::as_array ($model )
+			Argument_Parser::as_array( $model )
 		);
 	}
 
-    /** @testdox When parsing a string argument, it should be possible to set the max length.,  */
+	/** @testdox When parsing a string argument, it should be possible to set the max length.,  */
 	public function test_string_pattern(): void {
 		$expected = array(
 			'string-arg' => array(
-				'type'      => 'string',
+				'type'    => 'string',
 				'pattern' => '#[0-9]+',
 			),
 		);
@@ -86,7 +86,7 @@ class Test_String_Type_Parser extends Abstract_Parser_Testcase {
 
 		$this->assertSame(
 			$expected,
-			Argument_Parser::as_array ($model )
+			Argument_Parser::as_array( $model )
 		);
 	}
 }
