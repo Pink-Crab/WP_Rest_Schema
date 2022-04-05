@@ -21,7 +21,7 @@ Defining valid JSON rest schema in WordPress is a little messy and easy to make 
 
 To install, you can use composer
 ```bash
-$ composer require pinkcrab/wp-rest-schema-builder
+$ composer require pinkcrab/wp-rest-schema
 ```
 for_meta_data
 ## Basic Usage ##
