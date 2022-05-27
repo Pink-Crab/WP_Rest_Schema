@@ -91,22 +91,34 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 		// Test fails if to few items
 		$response = $dispatch( array( 'single' ) )->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_too_few_items', $response['code'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_too_few_items', $response['code'] );
+		}
 
 		// Test fails with too many
 		$response = $dispatch( array( 'a', 'b', 'c', 'd', 'e', 'f' ) )->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_too_many_items', $response['code'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_too_many_items', $response['code'] );
+		}
 
 		// Test must be unique
 		$response = $dispatch( array( 'a', 'b', 'a' ) )->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_duplicate_items', $response['code'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_duplicate_items', $response['code'] );
+		}
 
 		// Test must be an array of strings.
 		$response = $dispatch( array( 1, 2, 3 ) )->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_invalid_type', $response['code'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_invalid_type', $response['code'] );
+		}
 
 		// Test can create post
 		$response = $dispatch( array( 'a', 'b', 'c' ) );
@@ -174,7 +186,10 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 		// Test that integer is required
 		$response = $dispatch( (object) array( 'boolean' => true ) )->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_property_required', $response['code'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_property_required', $response['code'] );
+		}
 
 		// Check type checks with integer type.
 		$response = $dispatch(
@@ -184,8 +199,11 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 			)
 		)->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_invalid_type', $response['code'] );
-		$this->assertEquals( 'meta.object_meta[integer] is not of type integer.', $response['message'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_invalid_type', $response['code'] );
+			$this->assertEquals( 'meta.object_meta[integer] is not of type integer.', $response['message'] );
+		}
 
 		// Check expect integer value.
 		$response = $dispatch(
@@ -195,8 +213,11 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 			)
 		)->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_not_in_enum', $response['code'] );
-		$this->assertEquals( 'meta.object_meta[integer] is not one of 1, 2, and 4.', $response['message'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_not_in_enum', $response['code'] );
+			$this->assertEquals( 'meta.object_meta[integer] is not one of 1, 2, and 4.', $response['message'] );
+		}
 
 		// Test can create post
 		$response = $dispatch(
@@ -205,24 +226,23 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 				'integer' => 4,
 			)
 		);
-		$this->assertEquals(201, $response->get_status());
+		$this->assertEquals( 201, $response->get_status() );
 		$data = $response->get_data();
-		$this->assertArrayHasKey('object_meta', $data['meta']);
-		$this->assertEquals(4, $data['meta']['object_meta']['integer']);
-		$this->assertEquals(true, $data['meta']['object_meta']['boolean']);
+		$this->assertArrayHasKey( 'object_meta', $data['meta'] );
+		$this->assertEquals( 4, $data['meta']['object_meta']['integer'] );
+		$this->assertEquals( true, $data['meta']['object_meta']['boolean'] );
 	}
 
-	public function test_post_string()
-	{
+	public function test_post_string() {
 		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		$user    = wp_set_current_user( $user_id );
 		$schema  = Argument_Parser::for_meta_data(
-			String_Type::on('string_meta')
+			String_Type::on( 'string_meta' )
 				->required()
-				->default('missing')
-				->min_length(2)
-				->max_length(12)
-				->context('view', 'edit', 'embed')
+				->default( 'missing' )
+				->min_length( 2 )
+				->max_length( 12 )
+				->context( 'view', 'edit', 'embed' )
 		);
 
 		register_meta(
@@ -263,8 +283,8 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 				}
 			);
 		};
-		$dispatch('ggg');
-		
+		$dispatch( 'ggg' );
+
 		$dispatch = function( $string ): \WP_REST_Response {
 			return $this->dispatch_request(
 				'GET',
@@ -273,7 +293,7 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 			);
 		};
 
-		dump($schema, $dispatch('ggg')->get_data()/* , $dispatch('ggg')->get_data() */);
+		// dump( $schema, $dispatch( 'ggg' )->get_data()/* , $dispatch('ggg')->get_data() */ );
 
 	}
 }

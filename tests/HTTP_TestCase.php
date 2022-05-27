@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Base class for Rest Application tests.
- *  
+ *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
  * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -34,17 +34,17 @@ abstract class HTTP_TestCase extends WP_UnitTestCase {
 	/** @var Spy_REST_Server */
 	protected $server;
 
-	public function setUp() {
+	public function setUp(): void {
 		parent::setUp();
 		add_filter( 'rest_url', array( $this, 'filter_rest_url_for_leading_slash' ), 10, 2 );
 
 		/** @var WP_REST_Server $wp_rest_server */
 		global $wp_rest_server;
-		$wp_rest_server = new \Spy_REST_Server;
+		$wp_rest_server = new \Spy_REST_Server();
 		$this->server   = $wp_rest_server;
 	}
 
-	public function tearDown() {
+	public function tearDown(): void {
 		parent::tearDown();
 		remove_filter( 'rest_url', array( $this, 'test_rest_url_for_leading_slash' ), 10, 2 );
 		/** @var WP_REST_Server $wp_rest_server */
