@@ -99,7 +99,10 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 		// Test fails with too many
 		$response = $dispatch( array( 'a', 'b', 'c', 'd', 'e', 'f' ) )->get_data();
 		$this->assertEquals( 400, $response['data']['status'] );
-		$this->assertEquals( 'rest_too_many_items', $response['code'] );
+		// If WP_VERSION is greater than 5.7
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_too_many_items', $response['code'] );
+		}
 
 		// Test must be unique
 		$response = $dispatch( array( 'a', 'b', 'a' ) )->get_data();
@@ -201,7 +204,6 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 			$this->assertEquals( 'rest_invalid_type', $response['code'] );
 			$this->assertEquals( 'meta.object_meta[integer] is not of type integer.', $response['message'] );
 		}
-		
 
 		// Check expect integer value.
 		$response = $dispatch(
@@ -216,7 +218,6 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 			$this->assertEquals( 'rest_not_in_enum', $response['code'] );
 			$this->assertEquals( 'meta.object_meta[integer] is not one of 1, 2, and 4.', $response['message'] );
 		}
-		
 
 		// Test can create post
 		$response = $dispatch(
