@@ -15,7 +15,9 @@ define( 'TEST_WP_ROOT', $wp_install_path );
 
 tests_add_filter(
 	'muplugins_loaded',
-	function() {}
+	function() {
+		define('WP_VERSION', $GLOBALS['wp_version']);
+	}
 );
 
 // Start up the WP testing environment.
