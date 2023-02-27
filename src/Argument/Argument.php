@@ -62,14 +62,14 @@ class Argument {
 	/**
 	 * Callback to validate value
 	 *
-	 * @var callable(param:string,request::\WP_REST_Request,key:string):bool|null
+	 * @var null|callable(string $param, \WP_REST_Request $request, string $key):bool
 	 */
 	protected $validation;
 
 	/**
 	 * Sanitizes the output
 	 *
-	 * @var callable(value:mixed):bool|null
+	 * @var null|callable(mixed $value):bool
 	 */
 	protected $sanitization;
 
