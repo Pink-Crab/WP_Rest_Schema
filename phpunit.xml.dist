@@ -14,8 +14,6 @@
 
     <php>
         <env name="WP_PHPUNIT__TESTS_CONFIG" value="tests/wp-config.php" />
-        <ini name="memory_limit" value="512M" />
-        <env name="XDEBUG_MODE" value="coverage"/>
     </php>
 
     <logging>
