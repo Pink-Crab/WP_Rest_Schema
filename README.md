@@ -2,8 +2,9 @@
 
 ....
 
-![alt text](https://img.shields.io/badge/Current_Version-0.0.1-yellow.svg?style=flat " ") 
-[![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
+[![Latest Stable Version](http://poser.pugx.org/pinkcrab/wp-rest-schema/v)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![Total Downloads](http://poser.pugx.org/pinkcrab/wp-rest-schema/downloads)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![Latest Unstable Version](http://poser.pugx.org/pinkcrab/wp-rest-schema/v/unstable)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![License](http://poser.pugx.org/pinkcrab/wp-rest-schema/license)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![PHP Version Require](http://poser.pugx.org/pinkcrab/wp-rest-schema/require/php)](https://packagist.org/packages/pinkcrab/wp-rest-schema)
+![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/WP_Rest_Schema?label=Contributors)
+![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/WP_Rest_Schema)
 [![WordPress 6.1 Test Suite [PHP7.2-8.1]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_1.yaml/badge.svg?branch=master)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_1.yaml)
 [![codecov](https://codecov.io/gh/Pink-Crab/WP_Rest_Schema/branch/master/graph/badge.svg?token=4yEceIaSFP)](https://codecov.io/gh/Pink-Crab/WP_Rest_Schema) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/WP_Rest_Schema/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/WP_Rest_Schema/?branch=master)
 
