@@ -29,10 +29,10 @@
         "php-stubs/wordpress-stubs": "^6.0 || ^5.9",
         "roots/wordpress": "^6.1",
         "wp-phpunit/wp-phpunit": "^6.1",
-        "dealerdirect/phpcodesniffer-composer-installer": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "<=1.0.0",
         "wp-coding-standards/wpcs": "*",
         "yoast/phpunit-polyfills": "^0.2.0 || ^1.0.0",
-        "symfony/var-dumper": "*",
+        "symfony/var-dumper": "<6.2.7",
         "gin0115/wpunit-helpers": "~1",
         "vlucas/phpdotenv": "^5.4"
     },
