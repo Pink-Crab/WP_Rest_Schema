@@ -2,12 +2,17 @@
 
 ....
 
-![alt text](https://img.shields.io/badge/Current_Version-0.0.1-yellow.svg?style=flat " ") 
-[![Open Source Love](https://badges.frapsoft.com/os/mit/mit.svg?v=102)]()
+[![Latest Stable Version](http://poser.pugx.org/pinkcrab/wp-rest-schema/v)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![Total Downloads](http://poser.pugx.org/pinkcrab/wp-rest-schema/downloads)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![Latest Unstable Version](http://poser.pugx.org/pinkcrab/wp-rest-schema/v/unstable)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![License](http://poser.pugx.org/pinkcrab/wp-rest-schema/license)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![PHP Version Require](http://poser.pugx.org/pinkcrab/wp-rest-schema/require/php)](https://packagist.org/packages/pinkcrab/wp-rest-schema)
+![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/WP_Rest_Schema?label=Contributors)
+![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/WP_Rest_Schema)
+[![WordPress 5.9 Test Suite [PHP7.2-8.1]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_5_9.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_5_9.yaml)
+[![WordPress 6.0 Test Suite [PHP7.2-8.1]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_0.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_0.yaml)
 [![WordPress 6.1 Test Suite [PHP7.2-8.1]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_1.yaml/badge.svg?branch=master)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_1.yaml)
 [![codecov](https://codecov.io/gh/Pink-Crab/WP_Rest_Schema/branch/master/graph/badge.svg?token=4yEceIaSFP)](https://codecov.io/gh/Pink-Crab/WP_Rest_Schema) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/WP_Rest_Schema/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/WP_Rest_Schema/?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c836fefdf060dd6f74c0/maintainability)](https://codeclimate.com/github/Pink-Crab/WP_Rest_Schema/maintainability)
 
-## Version 0.1.0-beta3 ##
+## This is still pre release ##
+> While this library is in pre release, it is still being used in production, but please be aware that the API may change. Current features are stable, but new features may be added.
 
 ****
 
