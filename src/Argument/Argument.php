@@ -62,7 +62,7 @@ class Argument {
 	/**
 	 * Callback to validate value
 	 *
-	 * @var null|callable(string $param, \WP_REST_Request $request, string $key):bool
+	 * @var null|(callable(string $param, \WP_REST_Request $request, string $key):bool)
 	 */
 	protected $validation;
 
