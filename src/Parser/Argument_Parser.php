@@ -153,7 +153,7 @@ class Argument_Parser {
 			$attributes['enum'] = $this->argument->get_expected();
 		}
 
-		if ( is_array( $this->argument->get_context() ) && ! empty( $this->argument->get_context() ) ) {
+		if ( ! empty( $this->argument->get_context() ) ) {
 			$attributes['context'] = $this->argument->get_context();
 		}
 

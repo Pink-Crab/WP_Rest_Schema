@@ -18,12 +18,12 @@ use PinkCrab\WP_Rest_Schema\Argument\Attribute\Number_Attributes;
 class Number_Type extends Argument {
 
 	/**
-	 * @method static exclusive_minimum( bool $min ): self
-	 * @method static exclusive_maximum( bool $min ): self
-	 * @method static exclusive_maximum( float $multiple_of ): self
-	 * @method bool|null get_exclusive_maximum(): ?bool
-	 * @method bool|null get_exclusive_minimum(): ?bool
-	 * @method float|null get_multiple_of(): ?float
+	 * @method static exclusive_minimum( bool $min )
+	 * @method static exclusive_maximum( bool $min )
+	 * @method static exclusive_maximum( float $multiple_of )
+	 * @method bool|null get_exclusive_maximum()
+	 * @method bool|null get_exclusive_minimum()
+	 * @method float|null get_multiple_of()
 	 */
 	use Number_Attributes;
 
