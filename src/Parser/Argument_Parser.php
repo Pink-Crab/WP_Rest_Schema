@@ -13,11 +13,13 @@ declare(strict_types=1);
 namespace PinkCrab\WP_Rest_Schema\Parser;
 
 use PinkCrab\WP_Rest_Schema\Argument\Argument;
+use PinkCrab\WP_Rest_Schema\Argument\Union_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Number_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Integer_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Array_Attribute_Parser;
 use PinkCrab\WP_Rest_Schema\Parser\Object_Attribute_Parser;
+use PinkCrab\WP_Rest_Schema\Parser\String_Attribute_Parser;
 
 class Argument_Parser {
 
@@ -64,6 +66,7 @@ class Argument_Parser {
 	 */
 	public static function as_single( Argument $argument ): array {
 		$parsed = ( new self( $argument ) )->parse_as_indexed_array();
+
 		return count( $parsed ) < 1
 			? array()
 			: reset( $parsed );
@@ -90,6 +93,22 @@ class Argument_Parser {
 	 * @return array<string, mixed>
 	 */
 	public function parse_as_indexed_array(): array {
+		// If the argument is a union type, parse each type.
+		if ( is_a( $this->argument, \PinkCrab\WP_Rest_Schema\Argument\Union_Type::class ) ) {
+			/** @var Union_Type $argument */
+			$argument = $this->argument;
+
+			return array(
+				$argument->get_union_type() => array_reduce(
+					$argument->get_options(),
+					function( array $carry, Argument $type ): array {
+						$carry[ $type->get_key() ] = ( new self( $type ) )->parse_as_list();
+						return $carry;
+					},
+					array()
+				),
+			);
+		}
 		return array(
 			$this->argument->get_key() => array_merge(
 				$this->shared_attributes(),
@@ -104,6 +123,20 @@ class Argument_Parser {
 	 * @return mixed[]
 	 */
 	public function parse_as_list(): array {
+		// If the argument is a union type, parse each type.
+		if ( is_a( $this->argument, \PinkCrab\WP_Rest_Schema\Argument\Union_Type::class ) ) {
+			/** @var Union_Type $argument */
+			$argument  = $this->argument;
+			$arguments = array_map(
+				function( Argument $type ): array {
+					return ( new self( $type ) )->parse_as_list();
+				},
+				$argument->get_options()
+			);
+
+			return array( $argument->get_union_type() => $arguments );
+		}
+
 		return array_merge(
 			$this->shared_attributes(),
 			$this->get_type_attributes()
