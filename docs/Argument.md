@@ -597,3 +597,101 @@ $argument = Object_Type::new()
     ]
 ]
 ```
+
+#### Boolean Property
+
+> `boolean_property(string $name, ?callable(Boolean_Type):Boolean_Type $callback): self`
+
+```php
+
+$argument = Object_Type::new()
+    ->boolean_property('name');
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'boolean'
+        ]
+    ]
+]
+```
+
+#### Null Property
+
+> `null_property(string $name, ?callable(Null_Type):Null_Type $callback): self`
+
+```php
+
+$argument = Object_Type::new()
+    ->null_property('name', function($null){
+        return $null->description('This is a null property');
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'null',
+            'description' => 'This is a null property'
+        ]
+    ]
+]
+```
+
+#### Object Property
+
+> `object_property(string $name, ?callable(Object_Type):Object_Type $callback): self`
+
+```php
+
+$argument = Object_Type::new()
+    ->object_property('name');
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'object'
+        ]
+    ]
+]
+```
+
+#### Array Property
+
+> `array_property(string $name, ?callable(Array_Type):Array_Type $callback): self`
+
+```php
+
+$argument = Object_Type::new()
+    ->array_property('name', fn($e) => $e->string_item());
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'array',
+            'items' => [
+                'type' => 'string'
+            ]
+        ]
+    ]
+]
+```
