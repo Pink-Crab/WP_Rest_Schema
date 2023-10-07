@@ -183,3 +183,124 @@ $argument = Integer_Type::new()
     'maximum' => 10
 ]
 ```
+
+## Array Argument Type
+
+### Item Relationships
+
+It is possible to set the relationship between the items of the array.
+
+> `all_of(): self`
+
+```php
+$argument = Array_Type::new()
+    ->all_of()
+    ->item(String_Type::new())
+    ->item(Number_Type::new());
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'allOf' => [
+            [
+                'type' => 'string'
+            ],
+            [
+                'type' => 'number'
+            ]
+        ]
+    ]
+]
+```
+
+> `any_of(): self`
+
+```php
+$argument = Array_Type::new()
+    ->any_of()
+    ->item(String_Type::new())
+    ->item(Number_Type::new());
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'anyOf' => [
+            [
+                'type' => 'string'
+            ],
+            [
+                'type' => 'number'
+            ]
+        ]
+    ]
+]
+```
+
+> `one_of(): self`
+
+```php
+$argument = Array_Type::new()
+    ->one_of()
+    ->item(String_Type::new())
+    ->item(Number_Type::new());
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'oneOf' => [
+            [
+                'type' => 'string'
+            ],
+            [
+                'type' => 'number'
+            ]
+        ]
+    ]
+]
+```
+
+
+### Items
+
+You can define the items of the array.
+
+> `item(Argument $item): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->item(String_Type::new());
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'string'
+    ]
+]
+```
+#### Item Helpers
+
+### String Item
+
+```php
+$argument = Array_Type::new()
+    ->string_item(function($string){
+        return $string->min_length(10);
+    });
+```

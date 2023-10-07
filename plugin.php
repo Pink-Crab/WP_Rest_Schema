@@ -8,6 +8,7 @@
  */
 
 use PhpParser\Node\UnionType;
+use PinkCrab\WP_Rest_Schema\Argument\Array_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Union_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Argument\String_Type;
@@ -67,7 +68,7 @@ add_action(
 		// $parser = new PinkCrab\WP_Rest_Schema\Parser\Argument_Parser( $string );
 		// dump( $string, $parser->as_single( $string ), $parser->for_meta_data( $string ) );
 
-		$object = Object_Type::on( 'objectyu' )
+		$object      = Object_Type::on( 'objectyu' )
 		->union_property(
 			'unions',
 			function( $e ) {
@@ -85,43 +86,58 @@ add_action(
 							->max_length( 42 )
 							->format( String_Type::FORMAT_EMAIL )
 				);
+				$e->option(
+					Array_Type::on( 'array' )
+							->any_of()
+							->item(
+								String_Type::on( 'string' )
+										->min_length( 4 )
+										->max_length( 42 )
+										->format( String_Type::FORMAT_EMAIL )
+							)
+							->integer_item(
+								fn( $e) => $e->minimum( 4 )
+								->maximum( 42 )
+							)
+				);
 				return $e;
 			}
 		)
-		->string_property( 'foo', fn(String_Type $e) => $e->required(false) )->string_property( 'bar' );
-$foo = new \stdClass();
-$foo->unions = true;
-// $foo->unions = 'me@g.com';
-$e = [
-	'type' => 'object',
-	'properties' => [
-		'foo' => [
-			'type' => 'string',
-			'name' => 'foo',
-		],
-		'bar' => [
-			'type' => 'string',
-			'name' => 'bar',
-		],
-		'unions' => [
-			'anyOf' => [
-				[
-					'type' => 'boolean',
-				],
-				[
+		->string_property( 'foo', fn( String_Type $e) => $e->required( false ) )->string_property( 'bar' );
+		$foo         = new \stdClass();
+		$foo->unions = true;
+		// $foo->unions = 'me@g.com';
+		$e = array(
+			'type'       => 'object',
+			'properties' => array(
+				'foo'    => array(
 					'type' => 'string',
-					'format' => 'email',
-				],
-			],
-			'name' => 'unions',
-		],
-	],
-];
-dump( $e, rest_validate_value_from_schema( $foo, $e ) );
-		
-dump($foo, $object, ( new PinkCrab\WP_Rest_Schema\Parser\Argument_Parser( $object ) )->parse_as_list());
+					'name' => 'foo',
+				),
+				'bar'    => array(
+					'type' => 'string',
+					'name' => 'bar',
+				),
+				'unions' => array(
+					'anyOf' => array(
+						array(
+							'type' => 'boolean',
+						),
+						array(
+							'type'   => 'string',
+							'format' => 'email',
+						),
+					),
+					'name'  => 'unions',
+				),
+			),
+		);
+		dump( $e, rest_validate_value_from_schema( $foo, $e ) );
+
+		dump( $foo, $object, ( new PinkCrab\WP_Rest_Schema\Parser\Argument_Parser( $object ) )->parse_as_list() );
 		// dump( $object, PinkCrab\WP_Rest_Schema\Parser\Argument_Parser::as_array( $object ) );
-		dump($foo,
+		dump(
+			$foo,
 			( new PinkCrab\WP_Rest_Schema\Parser\Argument_Parser( $object ) )->for_meta_data( $object ),
 			rest_validate_value_from_schema(
 				$foo,
