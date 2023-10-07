@@ -91,6 +91,8 @@ You can define a callback to sanitize the argument, which will be used in the sc
 
 ### sanitize(callable $sanitize_callback)
 
+> `function(mixed $value, WP_REST_Request $request, string $param): mixed`
+
 ```php
 $argument = String_Type::on('my_string')
     ->sanitize(function(mixed $value, WP_REST_Request $request, string $param){
@@ -104,5 +106,115 @@ $argument = String_Type::on('my_string')
     'sanitize_callback' => function(mixed $value, WP_REST_Request $request, string $param){
         return strtolower($value);
     }
+]
+```
+
+## Format
+
+You can define a format for the argument, which will be used in the schema.
+
+### format(string $format)
+
+```php
+$argument = String_Type::on('my_string')
+    ->format('email');
+```
+
+*Renders as* 
+```php
+[
+    'type' => 'string',
+    'format' => 'email'
+]
+```
+
+## Expected
+
+You can define a expected values for the argument, which will be used in the schema as Enum
+
+### expected(mixed ...$expected)
+
+```php
+$argument = String_Type::on('my_string')
+    ->expected('Hello World', 'Foo');
+```
+
+*Renders as* 
+```php
+[
+    'type' => 'string',
+    'enum' => ['Hello World', 'Foo']
+]
+```
+
+## Name
+
+You can define a name for the argument, which will be used in the schema.
+
+### name(string $name)
+
+```php
+$argument = String_Type::on('my_string')
+    ->name('My String');
+```
+
+*Renders as* 
+```php
+[
+    'type' => 'string',
+    'name' => 'My String'
+]
+```
+
+## Multiple Types
+
+You can define multiple types for the argument, which will be used in the schema.
+
+### union_with_type(string $types)
+
+```php
+$argument = String_Type::on('my_string')
+    ->union_with_type('integer');
+```
+
+*Renders as* 
+```php
+[
+    'type' => ['string', 'integer']
+]
+```
+
+> See the [Union Type](./union-type.md) for information on more complex unions.
+
+## Context
+
+You can define the context for the argument, which will be used in the schema.
+
+### context(string ...$context)
+As single context
+```php
+$argument = String_Type::on('my_string')
+    ->context('view');
+```
+
+*Renders as* 
+```php
+[
+    'type' => 'string',
+    'context' => 'view'
+]
+```
+
+As multiple context
+```php
+$argument = String_Type::on('my_string')
+    ->context('view', 'edit');
+```
+
+*Renders as* 
+```php
+[
+    'type' => 'string',
+    'context' => ['view', 'edit']
 ]
 ```
