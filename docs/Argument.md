@@ -190,6 +190,8 @@ $argument = Integer_Type::new()
 
 It is possible to set the relationship between the items of the array.
 
+### All Of
+
 > `all_of(): self`
 
 ```php
@@ -217,6 +219,7 @@ $argument = Array_Type::new()
 ]
 ```
 
+### Any Of
 > `any_of(): self`
 
 ```php
@@ -244,6 +247,7 @@ $argument = Array_Type::new()
 ]
 ```
 
+### One Of
 > `one_of(): self`
 
 ```php
