@@ -527,7 +527,7 @@ $argument = Array_Type::new()
 You can define the properties of the object using the following helpers.
 
 #### String Property
-> `string_property(string $name, callable(String_Type):String_Type $callback): self`
+> `string_property(string $name, ?callable(String_Type):String_Type $callback): self`
 
 ```php
 $argument = Object_Type::new()
@@ -551,7 +551,7 @@ $argument = Object_Type::new()
 ```
 
 #### Number Property
-> `number_property(string $name, callable(Number_Type):Number_Type $callback): self`
+> `number_property(string $name, ?callable(Number_Type):Number_Type $callback): self`
 
 ```php
 
@@ -577,14 +577,12 @@ $argument = Object_Type::new()
 
 #### Integer Property
 
-> `integer_property(string $name, callable(Integer_Type):Integer_Type $callback): self`
+> `integer_property(string $name, ?callable(Integer_Type):Integer_Type $callback): self`
 
 ```php
 
 $argument = Object_Type::new()
-    ->integer_property('name', function($integer){
-        return $integer->minimum(10);
-    });
+    ->integer_property('name');
 ```
 
 *Renders as* 
@@ -594,8 +592,7 @@ $argument = Object_Type::new()
     'type' => 'object',
     'properties' => [
         'name' => [
-            'type' => 'integer',
-            'minimum' => 10
+            'type' => 'integer'
         ]
     ]
 ]
