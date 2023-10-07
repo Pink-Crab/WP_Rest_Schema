@@ -2,11 +2,11 @@
 
 Shares all the attributes of the [Shared Argument Attributes](./shared-attributes.md)
 
-# Min Length
+## Min Length
 
 You can define the minimum length of the string.
 
-## min_length(int $min_length)
+### min_length(int $min_length)
 
 ```php
 $argument = String_Type::new()
@@ -21,11 +21,11 @@ $argument = String_Type::new()
 ]
 ```
 
-# Max Length
+## Max Length
 
 You can define the maximum length of the string.
 
-## max_length(int $max_length)
+### max_length(int $max_length)
 
 ```php
 $argument = String_Type::new()
@@ -40,11 +40,11 @@ $argument = String_Type::new()
 ]
 ```
 
-# Pattern
+## Pattern
 
 You can define a regex pattern for the string.
 
-## pattern(string $pattern)
+### pattern(string $pattern)
 
 ```php
 $argument = String_Type::new()
