@@ -95,3 +95,91 @@ $argument = String_Type::new()
     'pattern' => '/[a-z]{1,10}/'
 ]
 ```
+
+## Number Argument Type
+
+> Shares all the attributes of the [Number Attributes](./number-attributes.md)
+
+### Minimum
+
+You can define the minimum of the number.
+
+> `minimum(float $minimum)`
+
+```php
+$argument = Number_Type::new()
+    ->minimum(3.14);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'number',
+    'minimum' => 3.14
+]
+```
+
+### Maximum
+
+You can define the maximum of the number.
+
+> `maximum(float $maximum)`
+
+```php
+$argument = Number_Type::new()
+    ->maximum(3.14);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'number',
+    'maximum' => 3.14
+]
+```
+
+## Integer Argument Type
+
+> Shares all the attributes of the [Number Attributes](./number-attributes.md)
+
+### Minimum
+
+You can define the minimum of the integer.
+
+> `minimum(int $minimum)`
+
+```php
+$argument = Integer_Type::new()
+    ->minimum(10);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'integer',
+    'minimum' => 10
+]
+```
+
+### Maximum
+
+You can define the maximum of the integer.
+
+> `maximum(int $maximum)`
+
+```php
+$argument = Integer_Type::new()
+    ->maximum(10);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'integer',
+    'maximum' => 10
+]
+```

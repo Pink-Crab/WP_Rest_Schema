@@ -11,7 +11,7 @@ You can define the exclusive minimum of the number.
 ```php
 
 $argument = Number_Type::new()
-    ->minimum(10);
+    ->minimum(10)
     ->exclusive_minimum(true);
 ```
 
@@ -34,7 +34,7 @@ You can define the exclusive maximum of the number.
 ```php
 
 $argument = Number_Type::new()
-    ->maximum(10);
+    ->maximum(10)
     ->exclusive_maximum(true);
 ```
 
@@ -68,7 +68,3 @@ $argument = Number_Type::new()
     'multipleOf' => 10
 ]
 ```
-
-
-
-```php
