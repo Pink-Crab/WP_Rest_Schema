@@ -98,7 +98,7 @@ $argument = String_Type::new()
 
 ## Number Argument Type
 
-> Shares all the attributes of the [Number Attributes](./number-attributes.md)
+> Shares all the attributes of the [Number Attributes](./Argument/number-attributes.md)
 
 ### Minimum
 
@@ -142,7 +142,7 @@ $argument = Number_Type::new()
 
 ## Integer Argument Type
 
-> Shares all the attributes of the [Number Attributes](./number-attributes.md)
+> Shares all the attributes of the [Number Attributes](./Argument/number-attributes.md)
 
 ### Minimum
 
