@@ -9,7 +9,7 @@ You can define a description for the argument, which will be used in the schema.
 ### description(string $description)
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->description('This is a string argument');
 ```
 *Renders as* 
@@ -27,7 +27,7 @@ You can define a default value for the argument, which will be used in the schem
 ### default(mixed $default)
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->default('Hello World');
 ```
 
@@ -46,7 +46,7 @@ You can define if the argument is required, which will be used in the schema.
 ### required(bool $required)
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->required();
 ```
 
@@ -69,7 +69,7 @@ You can define a callback to validate the argument, which will be used in the sc
 > `function(mixed $value, WP_REST_Request $request, string $param): true|WP_Error`
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->validation(function(mixed $value, WP_REST_Request $request, string $param){
         return strlen($value) > 10;
     });
@@ -94,7 +94,7 @@ You can define a callback to sanitize the argument, which will be used in the sc
 > `function(mixed $value, WP_REST_Request $request, string $param): mixed`
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->sanitize(function(mixed $value, WP_REST_Request $request, string $param){
         return strtolower($value);
     });
@@ -116,8 +116,13 @@ You can define a format for the argument, which will be used in the schema.
 ### format(string $format)
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->format('email');
+
+// Can also be done using the new(config) method.
+$argument = String_Type::new(
+    fn(String_Type $e): String_Type => $e->format('email')
+);
 ```
 
 *Renders as* 
@@ -135,7 +140,7 @@ You can define a expected values for the argument, which will be used in the sch
 ### expected(mixed ...$expected)
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->expected('Hello World', 'Foo');
 ```
 
@@ -154,7 +159,7 @@ You can define a name for the argument, which will be used in the schema.
 ### name(string $name)
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->name('My String');
 ```
 
@@ -173,7 +178,7 @@ You can define multiple types for the argument, which will be used in the schema
 ### union_with_type(string $types)
 
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->union_with_type('integer');
 ```
 
@@ -193,7 +198,7 @@ You can define the context for the argument, which will be used in the schema.
 ### context(string ...$context)
 As single context
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->context('view');
 ```
 
@@ -207,7 +212,7 @@ $argument = String_Type::on('my_string')
 
 As multiple context
 ```php
-$argument = String_Type::on('my_string')
+$argument = String_Type::new()
     ->context('view', 'edit');
 ```
 
