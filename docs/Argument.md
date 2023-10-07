@@ -40,7 +40,7 @@ $args = Null_Type::new();
 
 You can define the minimum length of the string.
 
-> `min_length(int $min_length)`
+> `min_length(int $min_length): self`
 
 ```php
 $argument = String_Type::new()
@@ -60,7 +60,7 @@ $argument = String_Type::new()
 
 You can define the maximum length of the string.
 
-> `max_length(int $max_length)`
+> `max_length(int $max_length): self`
 
 ```php
 $argument = String_Type::new()
@@ -80,7 +80,7 @@ $argument = String_Type::new()
 
 You can define a regex pattern for the string.
 
-> `pattern(string $pattern)`
+> `pattern(string $pattern): self`
 
 ```php
 $argument = String_Type::new()
@@ -104,7 +104,7 @@ $argument = String_Type::new()
 
 You can define the minimum of the number.
 
-> `minimum(float $minimum)`
+> `minimum(float $minimum): self`
 
 ```php
 $argument = Number_Type::new()
@@ -124,7 +124,7 @@ $argument = Number_Type::new()
 
 You can define the maximum of the number.
 
-> `maximum(float $maximum)`
+> `maximum(float $maximum): self`
 
 ```php
 $argument = Number_Type::new()
@@ -148,7 +148,7 @@ $argument = Number_Type::new()
 
 You can define the minimum of the integer.
 
-> `minimum(int $minimum)`
+> `minimum(int $minimum): self`
 
 ```php
 $argument = Integer_Type::new()
@@ -168,7 +168,7 @@ $argument = Integer_Type::new()
 
 You can define the maximum of the integer.
 
-> `maximum(int $maximum)`
+> `maximum(int $maximum): self`
 
 ```php
 $argument = Integer_Type::new()

@@ -6,7 +6,7 @@ Selection of attributes for the number argument type.
 
 You can define the exclusive minimum of the number.
 
-### exclusive_minimum(bool $exclusive_minimum)
+> `exclusive_minimum(bool $exclusive_minimum): self`
 
 ```php
 
@@ -29,7 +29,7 @@ $argument = Number_Type::new()
 
 You can define the exclusive maximum of the number.
 
-### exclusive_maximum(bool $exclusive_maximum)
+> `exclusive_maximum(bool $exclusive_maximum): self`
 
 ```php
 
@@ -52,7 +52,7 @@ $argument = Number_Type::new()
 
 You can define the multiple of the number.
 
-### multiple_of(float $multiple_of)
+> `multiple_of(float $multiple_of): self`
 
 ```php
 
