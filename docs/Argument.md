@@ -6,6 +6,33 @@ Shares all the attributes of the [Shared Argument Attributes](./shared-attribute
 
 > There are no additional attributes for the boolean type.
 
+```php
+$args = Boolean_Type::new();
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'boolean'
+]
+```
+
+## Null Argument Type
+
+> There are no additional attributes for the null type.
+
+```php
+$args = Null_Type::new();
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'null'
+]
+```
 
 ## String Argument Type
 
@@ -21,6 +48,7 @@ $argument = String_Type::new()
 ```
 
 *Renders as* 
+
 ```php
 [
     'type' => 'string',
@@ -40,6 +68,7 @@ $argument = String_Type::new()
 ```
 
 *Renders as* 
+
 ```php
 [
     'type' => 'string',
@@ -59,6 +88,7 @@ $argument = String_Type::new()
 ```
 
 *Renders as* 
+
 ```php
 [
     'type' => 'string',
