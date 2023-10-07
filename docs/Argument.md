@@ -345,3 +345,178 @@ $argument = Array_Type::new()
     ]
 ]
 ```
+
+#### Integer Item
+
+>`integer_item(callable(Integer_Type):Integer_Type $callback): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->integer_item(function($integer){
+        return $integer->minimum(10);
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'integer',
+        'minimum' => 10
+    ]
+]
+```
+
+#### Boolean Item
+
+>`boolean_item(callable(Boolean_Type):Boolean_Type $callback): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->boolean_item(function($boolean){
+        return $boolean;
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'boolean'
+    ]
+]
+```
+
+#### Null Item
+
+>`null_item(callable(Null_Type):Null_Type $callback): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->null_item();
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'null'
+    ]
+]
+```
+
+#### Object Item
+
+>`object_item(callable(Object_Type):Object_Type $callback): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->object_item();
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'object',
+        ]
+    ]
+]
+```
+
+#### Array Item
+
+>`array_item(callable(Array_Type):Array_Type $callback): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->array_item();
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'array',
+        ]
+    ]
+]
+```
+
+### Minimum Items
+
+You can define the minimum items of the array.
+
+> `min_items(int $min_items): self`
+
+```php
+$argument = Array_Type::new()
+    ->min_items(10);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'minItems' => 10
+]
+```
+
+### Maximum Items
+
+You can define the maximum items of the array.
+
+> `max_items(int $max_items): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->max_items(10);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'maxItems' => 10
+]
+```
+
+### Unique Items
+
+You can define the unique items of the array.
+
+> `unique_items(bool $unique_items): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->unique_items(true);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'uniqueItems' => true
+]
+```
+
