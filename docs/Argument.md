@@ -301,9 +301,47 @@ $argument = Array_Type::new()
 
 #### String Item
 
+>`string_item(callable(String_Type):String_Type $callback): self`
+
 ```php
 $argument = Array_Type::new()
     ->string_item(function($string){
         return $string->min_length(10);
     });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'string',
+        'minLength' => 10
+    ]
+]
+```
+
+#### Number Item
+
+>`number_item(callable(Number_Type):Number_Type $callback): self`
+
+```php
+
+$argument = Array_Type::new()
+    ->number_item(function($number){
+        return $number->minimum(10);
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'array',
+    'items' => [
+        'type' => 'number',
+        'minimum' => 10
+    ]
+]
 ```
