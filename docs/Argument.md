@@ -520,3 +520,83 @@ $argument = Array_Type::new()
 ]
 ```
 
+## Object Argument Type
+
+### Properties
+
+You can define the properties of the object using the following helpers.
+
+#### String Property
+> `string_property(string $name, callable(String_Type):String_Type $callback): self`
+
+```php
+$argument = Object_Type::new()
+    ->string_property('name', function($string){
+        return $string->min_length(10);
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'string',
+            'minLength' => 10
+        ]
+    ]
+]
+```
+
+#### Number Property
+> `number_property(string $name, callable(Number_Type):Number_Type $callback): self`
+
+```php
+
+$argument = Object_Type::new()
+    ->number_property('name', function($number){
+        return $number->minimum(10);
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'number',
+            'minimum' => 10
+        ]
+    ]
+]
+```
+
+#### Integer Property
+
+> `integer_property(string $name, callable(Integer_Type):Integer_Type $callback): self`
+
+```php
+
+$argument = Object_Type::new()
+    ->integer_property('name', function($integer){
+        return $integer->minimum(10);
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'integer',
+            'minimum' => 10
+        ]
+    ]
+]
+```
