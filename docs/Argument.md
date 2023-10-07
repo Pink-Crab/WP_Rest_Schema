@@ -1,15 +1,13 @@
 # Argument
 
-### Boolean Argument Type
-
 Shares all the attributes of the [Shared Argument Attributes](./shared-attributes.md)
+
+## Boolean Argument Type
 
 > There are no additional attributes for the boolean type.
 
 
 ## String Argument Type
-
-Shares all the attributes of the [Shared Argument Attributes](./shared-attributes.md)
 
 ### Min Length
 
