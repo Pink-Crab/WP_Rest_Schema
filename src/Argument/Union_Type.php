@@ -16,6 +16,9 @@ use PinkCrab\WP_Rest_Schema\Argument\Argument;
 
 class Union_Type extends Argument {
 
+	public const ANY_OF = 'anyOf';
+	public const ONE_OF = 'oneOf';
+
 	/**
 	 * The types format.
 	 *
@@ -30,7 +33,7 @@ class Union_Type extends Argument {
 	 */
 	protected $union_type = 'anyOf';
 
-	final public function __construct( string $union_type = 'anyOf' ) {
+	final public function __construct( string $union_type = self::ANY_OF ) {
 		parent::__construct( 'union' . uniqid() );
 		$this->union_type = $union_type;
 		$this->type( Argument::TYPE_ANY );
