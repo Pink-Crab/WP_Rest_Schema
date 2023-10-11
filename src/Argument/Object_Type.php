@@ -98,9 +98,24 @@ class Object_Type extends Argument {
 	 * @return static
 	 */
 	protected function add_property( string $name, string $type, ?callable $config = null ): self {
-		$item                      = $this->create_child( $name, $type )->name( $name );
+		$item = $this->create_child( $name, $type );
+		// If not a union, add name.
+		if ( ! is_a( $item, Union_Type::class ) ) {
+			$item->name( $name );
+		}
+
 		$this->properties[ $name ] = is_null( $config ) ? $item : $config( $item );
 		return $this;
+	}
+
+	/*
+	 * Creates a union property
+	 *
+	 * @param callable|null $config
+	 * @return static
+	 */
+	public function union_property( string $name, ?callable $config = null ): self {
+		return $this->add_property( $name, Argument::TYPE_ANY, $config );
 	}
 
 	/**

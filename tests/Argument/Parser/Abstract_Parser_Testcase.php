@@ -51,6 +51,39 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 		);
 	}
 
+	/** @testdox When parsing an argument it should be possible to this without a custom key */
+	public function test_no_key_with_type() {
+		$expected = array(
+			'type' => $this->type_name(),
+		);
+
+		$model = $this->type_class()::new();
+
+		$this->assertSame(
+			$expected,
+			Argument_Parser::as_list( $model )
+		);
+	}
+
+	/** @testdox When parsing an argument with no custom key, you should still be able to set some attributes */
+	public function test_no_key_with_type_and_attributes() {
+		$expected = array(
+			'type'        => $this->type_name(),
+			'description' => 'some description',
+		);
+
+		$config = function( $e ) {
+			return $e->description( 'some description' );
+		};
+
+		$model = $this->type_class()::new($config);
+
+		$this->assertSame(
+			$expected,
+			Argument_Parser::as_list( $model )
+		);
+	}
+
 		/** @testdox It should be possible to set the types of an argument. */
 	public function test_setting_type_with_array(): void {
 
@@ -257,5 +290,4 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 			Argument_Parser::as_array( $model )
 		);
 	}
-
 }

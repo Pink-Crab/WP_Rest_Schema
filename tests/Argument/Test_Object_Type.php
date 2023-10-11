@@ -29,13 +29,15 @@ namespace PinkCrab\WP_Rest_Schema\Tests\Argument;
 use WP_UnitTestCase;
 use PinkCrab\WP_Rest_Schema\Argument\Null_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Array_Type;
+use PinkCrab\WP_Rest_Schema\Argument\Union_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Number_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Argument\String_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Boolean_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Integer_Type;
+use PinkCrab\WP_Rest_Schema\Tests\WP_Rest_Schema_TestCase;
 
-class Test_Object_Type extends WP_UnitTestCase {
+class Test_Object_Type extends WP_Rest_Schema_TestCase {
 
 	/** @testdox When creating a string type, the argument type should be preset.  */
 	public function test_sets_string_type(): void {
@@ -469,5 +471,65 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( Object_Type::class, $type );
 		$this->assertEquals( '^\\w+$', $type->get_name() );
+	}
+
+	/**
+	 * @testdox It should be possible to use a Union_Type as a property and have its criteria met.
+	 * @dataProvider ObjectUnionPropertyProvider
+	 */
+	public function test_union_property( \stdClass $value, bool $expected ): void {
+		$object = Object_Type::on( 'test' );
+		$object->string_property( 'foo' );
+		$object->union_property(
+			'union',
+			function( Union_Type $union ) {
+				$union->option( String_Type::on( 'string' ) );
+				$union->option( Boolean_Type::on( 'boolean' ) );
+				return $union;
+			}
+		);
+
+		if ( $expected ) {
+			$this->assertSchemaValid(
+				$value,
+				( new \PinkCrab\WP_Rest_Schema\Parser\Argument_Parser( $object ) )->parse_as_list()
+			);
+		} else {
+			$this->assertSchemaInvalid(
+				$value,
+				( new \PinkCrab\WP_Rest_Schema\Parser\Argument_Parser( $object ) )->parse_as_list()
+			);
+		}
+	}
+
+	/**
+	 * Union Property Provider.
+	 *
+	 * @return array<string, array<\stdClass, bool>>
+	 */
+	public function ObjectUnionPropertyProvider(): array {
+		return array(
+			'valid_string'  => array(
+				(object) array(
+					'foo'   => 'bar',
+					'union' => 'string',
+				),
+				true,
+			),
+			'valid_boolean' => array(
+				(object) array(
+					'foo'   => 'bar',
+					'union' => true,
+				),
+				true,
+			),
+			'invalid_int'   => array(
+				(object) array(
+					'foo'   => 'bar',
+					'union' => 123,
+				),
+				false,
+			),
+		);
 	}
 }

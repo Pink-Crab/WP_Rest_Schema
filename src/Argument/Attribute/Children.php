@@ -15,6 +15,7 @@ namespace PinkCrab\WP_Rest_Schema\Argument\Attribute;
 use PinkCrab\WP_Rest_Schema\Argument\Argument;
 use PinkCrab\WP_Rest_Schema\Argument\Null_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Array_Type;
+use PinkCrab\WP_Rest_Schema\Argument\Union_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Number_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Argument\String_Type;
@@ -37,6 +38,7 @@ trait Children {
 			Argument::TYPE_OBJECT  => Object_Type::class,
 			Argument::TYPE_STRING  => String_Type::class,
 			Argument::TYPE_NULL    => Null_Type::class,
+			Argument::TYPE_ANY     => Union_Type::class,
 		);
 	}
 
@@ -61,7 +63,6 @@ trait Children {
 
 		$key   = "{$this->get_key()}_{$reference}";
 		$class = $this->type_map()[ $type ];
-
 		return new $class( $key );
 	}
 }

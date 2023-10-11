@@ -61,17 +61,13 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Object_Type::on( 'arg-name' )
 			->string_property( 'foo' )
 			->boolean_property( 'bar' );
-		dump($model);
-dump(Argument_Parser::as_array( $model ));
+		// dump($model);
+// dump(Argument_Parser::as_array( $model ));
 		$this->assertSame(
 			$expected,
 			Argument_Parser::as_array( $model )
 		);
 	}
 
-	public function test(Type $var = null)
-	{
-		# code...
-	}
 
 }

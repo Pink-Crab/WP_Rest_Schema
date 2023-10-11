@@ -12,8 +12,11 @@ declare(strict_types=1);
 
 namespace PinkCrab\WP_Rest_Schema\Parser;
 
+use PinkCrab\WP_Rest_Schema\Argument\Argument;
+use PinkCrab\WP_Rest_Schema\Argument\Union_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Abstract_Parser;
+use PinkCrab\WP_Rest_Schema\Parser\Argument_Parser;
 
 
 class Object_Attribute_Parser extends Abstract_Parser {
@@ -45,6 +48,26 @@ class Object_Attribute_Parser extends Abstract_Parser {
 		}
 
 		// Additional properties.
+		if ( $argument->has_additional_properties() ) {
+			$attributes['additionalProperties'] = array_reduce(
+				$argument->get_additional_properties(),
+				function( array $carry, Argument $argument ): array {
+					$props = Argument_Parser::as_single( $argument );
+					// Recursively merge with existing.
+					foreach ( $props as $key => $value ) {
+						if ( ! isset( $carry[ $key ] ) ) {
+							$carry[ $key ][] = $value;
+						} else {
+							$carry[ $key ] = array_merge( $carry[ $key ], array( $value ) );
+						}
+					}
+					return $carry;
+				},
+				array()
+			);
+		} else {
+			$attributes['additionalProperties'] = false;
+		}
 
 		return $attributes;
 	}
@@ -69,10 +92,36 @@ class Object_Attribute_Parser extends Abstract_Parser {
 			$properties = Argument_Parser::as_single( array_values( $argument->get_properties() )[0] );
 		} else {
 			foreach ( $argument->get_properties() as $key => $value ) {
-				$properties[ $key ] = Argument_Parser::as_single( $value );
+				$properties[ $key ] = is_a( $value, Union_Type::class )
+					? $this->parse_union_property( $key, $value )
+					: Argument_Parser::as_single( $value );
 			}
 		}
 
 		return $properties;
+	}
+
+	/**
+	 * Parses an union property
+	 *
+	 * @param string $property
+	 * @param Union_Type $argument
+	 * @return array<string, mixed>
+	 */
+	protected function parse_union_property( string $property, Union_Type $argument ) : array {
+		// If we only have a single options, parse as a single.
+		if ( count( $argument->get_options() ) === 1 ) {
+			return Argument_Parser::as_single( array_values( $argument->get_options() )[0] );
+		}
+
+		return array(
+			'name'  => $property,
+			'anyOf' => array_map(
+				function( $option ): array {
+					return Argument_Parser::as_single( $option );
+				},
+				$argument->get_options()
+			),
+		);
 	}
 }

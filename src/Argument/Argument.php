@@ -34,6 +34,8 @@ class Argument {
 	public const TYPE_OBJECT = 'object';
 	/** @var string */
 	public const TYPE_NULL = 'null';
+	/** @var string */
+	public const TYPE_ANY = 'any';
 
 	/**
 	 * All valid format types.
@@ -144,6 +146,20 @@ class Argument {
 	final public static function on( string $key, ?callable $config = null ): self {
 		$class    = get_called_class();
 		$argument = new $class( $key );
+		return $config
+			? $config( $argument )
+			: $argument;
+	}
+
+	/**
+	 * Static anonymous constructor.
+	 *
+	 * @param callable $config
+	 * @return static
+	 */
+	final public static function new( ?callable $config = null ): self {
+		$class    = get_called_class();
+		$argument = new $class( \uniqid( $class ) );
 		return $config
 			? $config( $argument )
 			: $argument;
