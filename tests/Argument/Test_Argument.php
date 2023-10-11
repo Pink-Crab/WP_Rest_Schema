@@ -39,7 +39,7 @@ class Test_Argument extends WP_UnitTestCase {
 				->validation( 'is_string' )
 				->sanitization( 'esc_html' );
 
-			$this->assertInstanceOf( Argument::class, $argument );
+		$this->assertInstanceOf( Argument::class, $argument );
 		$this->assertEquals( 'id', $argument->get_key() );
 		$this->assertEquals( 'is_string', $argument->get_validation() );
 		$this->assertEquals( 'esc_html', $argument->get_sanitization() );

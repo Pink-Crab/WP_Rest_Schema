@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\WP_Rest_Schema\Parser;
 
+use PinkCrab\WP_Rest_Schema\Argument\Argument;
 use PinkCrab\WP_Rest_Schema\Argument\Union_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Abstract_Parser;
@@ -47,6 +48,26 @@ class Object_Attribute_Parser extends Abstract_Parser {
 		}
 
 		// Additional properties.
+		if ( $argument->has_additional_properties() ) {
+			$attributes['additionalProperties'] = array_reduce(
+				$argument->get_additional_properties(),
+				function( array $carry, Argument $argument ): array {
+					$props = Argument_Parser::as_single( $argument );
+					// Recursively merge with existing.
+					foreach ( $props as $key => $value ) {
+						if ( ! isset( $carry[ $key ] ) ) {
+							$carry[ $key ][] = $value;
+						} else {
+							$carry[ $key ] = array_merge( $carry[ $key ], array( $value ) );
+						}
+					}
+					return $carry;
+				},
+				array()
+			);
+		} else {
+			$attributes['additionalProperties'] = false;
+		}
 
 		return $attributes;
 	}

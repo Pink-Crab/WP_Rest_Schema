@@ -695,3 +695,66 @@ $argument = Object_Type::new()
     ]
 ]
 ```
+
+#### Union Property
+
+> `union_property(string $name, ?callable(Union_Type):Union_Type $callback): self`
+
+```php
+
+$argument = Object_Type::new()
+    ->union_property('name', function($union){
+        return $union
+            ->option(String_Type::new())
+            ->option(Number_Type::new());
+    });
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'anyOf' => [
+                [
+                    'type' => 'string'
+                ],
+                [
+                    'type' => 'number'
+                ]
+            ]
+        ]
+    ]
+]
+```
+
+### Additional Properties
+
+By default and object does allow additional properties, but you can change this behavior.
+
+#### Allow Additional Properties
+
+> `additional_properties(bool): self`
+
+```php
+
+$args = Object_Type::new()
+    ->string_property('name')
+    ->additional_properties(false);
+```
+
+*Renders as* 
+
+```php
+[
+    'type' => 'object',
+    'properties' => [
+        'name' => [
+            'type' => 'string'
+        ]
+    ],
+    'additionalProperties' => false
+]
+```
