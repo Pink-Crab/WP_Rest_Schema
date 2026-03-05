@@ -45,11 +45,15 @@ class Argument {
 	/** @var string */
 	public const FORMAT_IP = 'ip';
 	/** @var string */
-	public const FORMAT_URL = 'url';
+	public const FORMAT_URI = 'uri';
 	/** @var string */
 	public const FORMAT_UUID = 'uuid';
 	/** @var string */
 	public const FORMAT_HEX = 'hex-color';
+	/** @var string */
+	public const FORMAT_TEXT_FIELD = 'text-field';
+	/** @var string */
+	public const FORMAT_TEXTAREA_FIELD = 'textarea-field';
 
 
 	/**
@@ -62,14 +66,14 @@ class Argument {
 	/**
 	 * Callback to validate value
 	 *
-	 * @var callable(param:string,request::\WP_REST_Request,key:string):bool|null
+	 * @var null|(callable(string $param, \WP_REST_Request<array<string, mixed>> $request, string $key):bool)
 	 */
 	protected $validation;
 
 	/**
 	 * Sanitizes the output
 	 *
-	 * @var callable(value:mixed):bool|null
+	 * @var null|callable(mixed $value):bool
 	 */
 	protected $sanitization;
 
@@ -129,6 +133,20 @@ class Argument {
 	 */
 	protected $context = array();
 
+	/**
+	 * Whether the property is readonly.
+	 *
+	 * @var bool|null
+	 */
+	protected $readonly;
+
+	/**
+	 * The schema title.
+	 *
+	 * @var string|null
+	 */
+	protected $title;
+
 
 	public function __construct( string $key ) {
 		$this->key = $key;
@@ -150,6 +168,17 @@ class Argument {
 	}
 
 	/**
+	 * Alias for on().
+	 *
+	 * @param string $key
+	 * @param callable|null $config
+	 * @return static
+	 */
+	final public static function field( string $key, ?callable $config = null ): self {
+		return static::on( $key, $config );
+	}
+
+	/**
 	 * Get the argument key
 	 *
 	 * @return string
@@ -161,7 +190,7 @@ class Argument {
 	/**
 	 * Get callback to validate value
 	 *
-	 * @return callable(string, \WP_REST_Request, string): bool|null
+	 * @return callable(string, \WP_REST_Request<array<string, mixed>>, string): bool|null
 	 */
 	public function get_validation(): ?callable {
 		return $this->validation;
@@ -170,12 +199,12 @@ class Argument {
 	/**
 	 * Set callback to validate value
 	 *
-	 * @param callable(string, \WP_REST_Request, string): bool $validation  Callback to validate value
+	 * @param callable(string, \WP_REST_Request<array<string, mixed>>, string): bool $validation  Callback to validate value
 	 *
 	 * @return static
 	 */
 	public function validation( callable $validation ): self {
-		$this->validation = $validation;
+		$this->validation = $validation; // @phpstan-ignore assign.propertyType
 		return $this;
 	}
 
@@ -222,11 +251,11 @@ class Argument {
 	/**
 	 * Set the default value
 	 *
-	 * @param string|int|float|bool $default  The default value
+	 * @param string|int|float|bool $default_value  The default value
 	 * @return static
 	 */
-	public function default( $default ): self {
-		$this->default = $default;
+	public function default( $default_value ): self {
+		$this->default = $default_value;
 		return $this;
 	}
 
@@ -280,6 +309,7 @@ class Argument {
 			throw new TypeError( 'Only single types or array of types are allowed with arguments.' );
 		}
 
+		/** @var string|array<int, string> $type */
 		$this->type = $type;
 		return $this;
 	}
@@ -404,9 +434,11 @@ class Argument {
 	 * @return static
 	 */
 	public function expected( ...$expected ): self {
-		$this->expected = is_array( $this->expected )
+		/** @var array<bool|float|int|string> $merged */
+		$merged         = is_array( $this->expected )
 			? array_merge( $this->expected, $expected )
 			: $expected;
+		$this->expected = $merged;
 		return $this;
 	}
 
@@ -416,7 +448,8 @@ class Argument {
 	 * @return string|null
 	 */
 	public function get_name(): ?string {
-		return $this->get_attribute( 'name' );
+		$value = $this->get_attribute( 'name' );
+		return is_string( $value ) ? $value : null;
 	}
 
 	/**
@@ -447,6 +480,46 @@ class Argument {
 	 */
 	public function context( ...$context ) {
 		$this->context = array_merge( $this->context, $context );
+		return $this;
+	}
+
+	/**
+	 * Get whether the property is readonly.
+	 *
+	 * @return bool|null
+	 */
+	public function get_readonly(): ?bool {
+		return $this->readonly;
+	}
+
+	/**
+	 * Set whether the property is readonly.
+	 *
+	 * @param bool $readonly_value
+	 * @return static
+	 */
+	public function readonly( bool $readonly_value = true ): self {
+		$this->readonly = $readonly_value;
+		return $this;
+	}
+
+	/**
+	 * Get the schema title.
+	 *
+	 * @return string|null
+	 */
+	public function get_title(): ?string {
+		return $this->title;
+	}
+
+	/**
+	 * Set the schema title.
+	 *
+	 * @param string $title
+	 * @return static
+	 */
+	public function title( string $title ): self {
+		$this->title = $title;
 		return $this;
 	}
 }

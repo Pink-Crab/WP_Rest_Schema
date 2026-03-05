@@ -18,12 +18,12 @@ use PinkCrab\WP_Rest_Schema\Argument\Attribute\Number_Attributes;
 class Number_Type extends Argument {
 
 	/**
-	 * @method static exclusive_minimum( bool $min ): self
-	 * @method static exclusive_maximum( bool $min ): self
-	 * @method static exclusive_maximum( float $multiple_of ): self
-	 * @method bool|null get_exclusive_maximum(): ?bool
-	 * @method bool|null get_exclusive_minimum(): ?bool
-	 * @method float|null get_multiple_of(): ?float
+	 * @method static exclusive_minimum( bool $min )
+	 * @method static exclusive_maximum( bool $min )
+	 * @method static exclusive_maximum( float $multiple_of )
+	 * @method bool|null get_exclusive_maximum()
+	 * @method bool|null get_exclusive_minimum()
+	 * @method float|null get_multiple_of()
 	 */
 	use Number_Attributes;
 
@@ -48,7 +48,8 @@ class Number_Type extends Argument {
 	 * @return float|null
 	 */
 	public function get_minimum(): ?float {
-		return $this->get_attribute( 'minimum' );
+		$value = $this->get_attribute( 'minimum' );
+		return is_float( $value ) ? $value : null;
 	}
 
 	/**
@@ -67,6 +68,7 @@ class Number_Type extends Argument {
 	 * @return float|null
 	 */
 	public function get_maximum(): ?float {
-		return $this->get_attribute( 'maximum' );
+		$value = $this->get_attribute( 'maximum' );
+		return is_float( $value ) ? $value : null;
 	}
 }

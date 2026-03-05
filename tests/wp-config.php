@@ -1,5 +1,17 @@
 <?php
 
+// Custom error handler to suppress known WP 6.8 notice about wp_is_block_theme being called too early.
+// @see https://core.trac.wordpress.org/ticket/63086
+set_error_handler(
+	function ( $errno, $errstr ) {
+		if ( $errno === E_USER_NOTICE && strpos( $errstr, 'wp_is_block_theme' ) !== false ) {
+			return true;
+		}
+		return false;
+	},
+	E_USER_NOTICE
+);
+
 /* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', dirname( dirname( __FILE__ ) ) . '/wordpress/' );
 
@@ -38,11 +50,11 @@ if ( getenv( 'environment_github' ) ) {
 	define( 'DB_CHARSET', 'utf8' );
 	define( 'DB_COLLATE', '' );
 } else {
-	// IF YOU ARE PLANNING TO RUN THESE TESTS, SET THESE TO MATCH YOUR DB.
-	define( 'DB_NAME', getenv( 'WP_DB_NAME' ) ?: 'pc_core_tests' );
-	define( 'DB_USER', getenv( 'WP_DB_USER' ) ?: 'root' );
-	define( 'DB_PASSWORD', getenv( 'WP_DB_PASS' ) ?: '' );
-	define( 'DB_HOST', '127.0.0.1' );
+	// IF YOU ARE PLANNING TO RUN THESE TESTS LOCALLY, SET THESE TO MATCH YOUR DB.
+	define( 'DB_NAME', getenv( 'WP_DB_NAME' ) );
+	define( 'DB_USER', getenv( 'WP_DB_USER' ) );
+	define( 'DB_PASSWORD', getenv( 'WP_DB_PASS' ) );
+	define( 'DB_HOST', getenv( 'WP_DB_HOST' ) );
 	define( 'DB_CHARSET', 'utf8' );
 	define( 'DB_COLLATE', '' );
 }

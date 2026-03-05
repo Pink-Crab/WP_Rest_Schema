@@ -199,138 +199,40 @@ class Test_Object_Type extends WP_UnitTestCase {
 	 * Additional Properties.
 	 */
 
-		/** @testdox Can set a string additional property */
-	public function test_string_additional_property(): void {
+	/** @testdox Can set additional properties as boolean true (allow) */
+	public function test_additional_properties_allowed(): void {
 		$arg = Object_Type::on( 'test' );
-		$arg->string_additional_property(
-			'additional_property_name',
-			function( String_Type $type ): String_Type {
-				$this->assertEquals( 'additional_property_name', $type->get_name() );
-				$this->assertInstanceOf( String_Type::class, $type );
-				return $type;
-			}
-		);
+		$arg->additional_properties( true );
 
-		$this->assertCount( 1, $arg->get_additional_properties() );
-		$this->assertArrayHasKey( 'additional_property_name', $arg->get_additional_properties() );
-
-		$type = $arg->get_additional_properties()['additional_property_name'];
-		$this->assertInstanceOf( String_Type::class, $type );
-		$this->assertEquals( 'additional_property_name', $type->get_name() );
+		$this->assertTrue( $arg->has_additional_properties() );
+		$this->assertTrue( $arg->get_additional_properties() );
 	}
 
-	/** @testdox Can set a number additional property */
-	public function test_number_additional_property(): void {
+	/** @testdox Can set additional properties as boolean false (disallow) */
+	public function test_additional_properties_disallowed(): void {
 		$arg = Object_Type::on( 'test' );
-		$arg->number_additional_property(
-			'additional_property_name',
-			function( Number_Type $type ): Number_Type {
-				$this->assertEquals( 'additional_property_name', $type->get_name() );
-				$this->assertInstanceOf( Number_Type::class, $type );
-				return $type;
-			}
-		);
+		$arg->additional_properties( false );
 
-		$this->assertCount( 1, $arg->get_additional_properties() );
-		$this->assertArrayHasKey( 'additional_property_name', $arg->get_additional_properties() );
-		$type = $arg->get_additional_properties()['additional_property_name'];
-		$this->assertInstanceOf( Number_Type::class, $type );
-		$this->assertEquals( 'additional_property_name', $type->get_name() );
+		$this->assertTrue( $arg->has_additional_properties() );
+		$this->assertFalse( $arg->get_additional_properties() );
 	}
 
-	/** @testdox Can set a integer additional property */
-	public function test_integer_additional_property(): void {
-		$arg = Object_Type::on( 'test' );
-		$arg->integer_additional_property(
-			'additional_property_name',
-			function( Integer_Type $type ): Integer_Type {
-				$this->assertEquals( 'additional_property_name', $type->get_name() );
-				$this->assertInstanceOf( Integer_Type::class, $type );
-				return $type;
-			}
-		);
+	/** @testdox Can set additional properties as a schema */
+	public function test_additional_properties_schema(): void {
+		$arg    = Object_Type::on( 'test' );
+		$schema = String_Type::on( 'extra' );
+		$arg->additional_properties_schema( $schema );
 
-		$this->assertCount( 1, $arg->get_additional_properties() );
-		$this->assertArrayHasKey( 'additional_property_name', $arg->get_additional_properties() );
-		$type = $arg->get_additional_properties()['additional_property_name'];
-		$this->assertInstanceOf( Integer_Type::class, $type );
-		$this->assertEquals( 'additional_property_name', $type->get_name() );
+		$this->assertTrue( $arg->has_additional_properties() );
+		$this->assertInstanceOf( String_Type::class, $arg->get_additional_properties() );
 	}
 
-	/** @testdox Can set a null additional property */
-	public function test_null_additional_property(): void {
+	/** @testdox Additional properties defaults to null (not set) */
+	public function test_additional_properties_default_null(): void {
 		$arg = Object_Type::on( 'test' );
-		$arg->null_additional_property(
-			'additional_property_name',
-			function( Null_Type $type ): Null_Type {
-				$this->assertEquals( 'additional_property_name', $type->get_name() );
-				$this->assertInstanceOf( Null_Type::class, $type );
-				return $type;
-			}
-		);
 
-		$this->assertCount( 1, $arg->get_additional_properties() );
-		$this->assertArrayHasKey( 'additional_property_name', $arg->get_additional_properties() );
-		$type = $arg->get_additional_properties()['additional_property_name'];
-		$this->assertInstanceOf( Null_Type::class, $type );
-		$this->assertEquals( 'additional_property_name', $type->get_name() );
-	}
-
-	/** @testdox Can set a boolean additional property */
-	public function test_boolean_additional_property(): void {
-		$arg = Object_Type::on( 'test' );
-		$arg->boolean_additional_property(
-			'additional_property_name',
-			function( Boolean_Type $type ): Boolean_Type {
-				$this->assertEquals( 'additional_property_name', $type->get_name() );
-				$this->assertInstanceOf( Boolean_Type::class, $type );
-				return $type;
-			}
-		);
-
-		$this->assertCount( 1, $arg->get_additional_properties() );
-		$this->assertArrayHasKey( 'additional_property_name', $arg->get_additional_properties() );
-		$type = $arg->get_additional_properties()['additional_property_name'];
-		$this->assertInstanceOf( Boolean_Type::class, $type );
-		$this->assertEquals( 'additional_property_name', $type->get_name() );
-	}
-
-	/** @testdox Can set a array additional property */
-	public function test_array_additional_property(): void {
-		$arg = Object_Type::on( 'test' );
-		$arg->array_additional_property(
-			'additional_property_name',
-			function( Array_Type $type ): Array_Type {
-				$this->assertEquals( 'additional_property_name', $type->get_name() );
-				$this->assertInstanceOf( Array_Type::class, $type );
-				return $type;
-			}
-		);
-
-		$this->assertCount( 1, $arg->get_additional_properties() );
-		$this->assertArrayHasKey( 'additional_property_name', $arg->get_additional_properties() );
-		$type = $arg->get_additional_properties()['additional_property_name'];
-		$this->assertInstanceOf( Array_Type::class, $type );
-		$this->assertEquals( 'additional_property_name', $type->get_name() );
-	}
-
-	/** @testdox Can set a object additional property */
-	public function test_object_additional_property(): void {
-		$arg = Object_Type::on( 'test' );
-		$arg->object_additional_property(
-			'additional_property_name',
-			function( Object_Type $type ): Object_Type {
-				$this->assertEquals( 'additional_property_name', $type->get_name() );
-				$this->assertInstanceOf( Object_Type::class, $type );
-				return $type;
-			}
-		);
-
-		$this->assertCount( 1, $arg->get_additional_properties() );
-		$this->assertArrayHasKey( 'additional_property_name', $arg->get_additional_properties() );
-		$type = $arg->get_additional_properties()['additional_property_name'];
-		$this->assertInstanceOf( Object_Type::class, $type );
-		$this->assertEquals( 'additional_property_name', $type->get_name() );
+		$this->assertFalse( $arg->has_additional_properties() );
+		$this->assertNull( $arg->get_additional_properties() );
 	}
 
 	/**

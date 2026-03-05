@@ -160,9 +160,9 @@ class Test_Argument extends WP_UnitTestCase {
 		$argument->format( Argument::FORMAT_EMAIL );
 		$this->assertEquals( 'email', $argument->get_format() );
 
-		// URL
-		$argument->format( Argument::FORMAT_URL );
-		$this->assertEquals( 'url', $argument->get_format() );
+		// URI
+		$argument->format( Argument::FORMAT_URI );
+		$this->assertEquals( 'uri', $argument->get_format() );
 	}
 
 	/** @testdox It should be possible to set the expected values by pushing them either singulr or in a group. */
@@ -250,5 +250,74 @@ class Test_Argument extends WP_UnitTestCase {
 		$this->assertNotEmpty( $argument->get_attributes() );
 		$this->assertArrayHasKey( 'key', $argument->get_attributes() );
 		$this->assertContains( 'value', $argument->get_attributes() );
+	}
+
+	/** @testdox It should be possible to set and get the readonly property. */
+	public function test_readonly(): void {
+		$argument = new Argument( 'id' );
+
+		$this->assertNull( $argument->get_readonly() );
+
+		$argument->readonly();
+		$this->assertTrue( $argument->get_readonly() );
+
+		$argument->readonly( false );
+		$this->assertFalse( $argument->get_readonly() );
+	}
+
+	/** @testdox It should be possible to set and get the title property. */
+	public function test_title(): void {
+		$argument = new Argument( 'id' );
+
+		$this->assertNull( $argument->get_title() );
+
+		$argument->title( 'My Title' );
+		$this->assertEquals( 'My Title', $argument->get_title() );
+	}
+
+	/** @testdox It should be possible to create an argument using the field() alias. */
+	public function test_field_alias(): void {
+		$argument = Argument::field( 'my_key' );
+
+		$this->assertInstanceOf( Argument::class, $argument );
+		$this->assertEquals( 'my_key', $argument->get_key() );
+	}
+
+	/** @testdox It should be possible to create an argument using the field() alias with config callable. */
+	public function test_field_alias_with_config(): void {
+		$argument = Argument::field(
+			'my_key',
+			function( Argument $arg ): Argument {
+				return $arg->description( 'from field' );
+			}
+		);
+
+		$this->assertEquals( 'my_key', $argument->get_key() );
+		$this->assertEquals( 'from field', $argument->get_description() );
+	}
+
+	/** @testdox The field() alias should work on subclasses (String_Type). */
+	public function test_field_alias_on_subclass(): void {
+		$argument = String_Type::field( 'name' );
+
+		$this->assertInstanceOf( String_Type::class, $argument );
+		$this->assertEquals( 'name', $argument->get_key() );
+		$this->assertEquals( 'string', $argument->get_type() );
+	}
+
+	/** @testdox It should be possible to set and get the context for an argument. */
+	public function test_context(): void {
+		$argument = new Argument( 'id' );
+
+		$this->assertEmpty( $argument->get_context() );
+
+		$argument->context( 'view', 'edit' );
+		$this->assertCount( 2, $argument->get_context() );
+		$this->assertContains( 'view', $argument->get_context() );
+		$this->assertContains( 'edit', $argument->get_context() );
+
+		$argument->context( 'embed' );
+		$this->assertCount( 3, $argument->get_context() );
+		$this->assertContains( 'embed', $argument->get_context() );
 	}
 }

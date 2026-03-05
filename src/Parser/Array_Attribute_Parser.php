@@ -68,7 +68,7 @@ class Array_Attribute_Parser extends Abstract_Parser {
 	 * @param Array_Type $argument
 	 * @return array<int, mixed>
 	 */
-	protected function parse_array_items( Array_Type $argument ) : array {
+	protected function parse_array_items( Array_Type $argument ): array {
 		$items = array();
 
 		if ( ! $argument->has_items() ) {

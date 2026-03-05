@@ -51,12 +51,12 @@ trait Children {
 	 */
 	protected function create_child( string $reference, string $type ): Argument {
 		// Can only be called from an Argument parent class.
-		if ( ! is_a( $this, Argument::class ) ) {
+		if ( ! is_a( $this, Argument::class ) ) { // @phpstan-ignore function.alreadyNarrowedType
 			throw new \Exception( 'Only classes that extend Argument can create children types', 300 );
 		}
 
 		if ( ! in_array( $type, array_keys( $this->type_map() ), true ) ) {
-			throw new \Exception( "{$type} is not a valid argument type.", 301 );
+			throw new \Exception( esc_html( "{$type} is not a valid argument type." ), 301 );
 		}
 
 		$key   = "{$this->get_key()}_{$reference}";
