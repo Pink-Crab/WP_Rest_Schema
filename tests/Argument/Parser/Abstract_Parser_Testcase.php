@@ -100,12 +100,12 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 		$expected = array(
 			'arg-name' => array(
 				'type'   => $this->type_name(),
-				'format' => 'url',
+				'format' => 'uri',
 			),
 		);
 
 		$model = $this->type_class()::on( 'arg-name' )
-			->format( Argument::FORMAT_URL );
+			->format( Argument::FORMAT_URI );
 
 		$this->assertSame(
 			$expected,
@@ -254,6 +254,60 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 
 		$this->assertSame(
 			( new Argument_Parser( $model ) )->parse_as_indexed_array(),
+			Argument_Parser::as_array( $model )
+		);
+	}
+
+	/** @testdox When parsing the argument, the readonly should be listed if defined. */
+	public function test_readonly(): void {
+		$expected = array(
+			'arg-name' => array(
+				'type'     => $this->type_name(),
+				'readonly' => true,
+			),
+		);
+
+		$model = $this->type_class()::on( 'arg-name' )
+			->readonly();
+
+		$this->assertSame(
+			$expected,
+			Argument_Parser::as_array( $model )
+		);
+	}
+
+	/** @testdox When parsing the argument, the title should be listed if defined. */
+	public function test_title(): void {
+		$expected = array(
+			'arg-name' => array(
+				'type'  => $this->type_name(),
+				'title' => 'My Title',
+			),
+		);
+
+		$model = $this->type_class()::on( 'arg-name' )
+			->title( 'My Title' );
+
+		$this->assertSame(
+			$expected,
+			Argument_Parser::as_array( $model )
+		);
+	}
+
+	/** @testdox When parsing the argument, the context should be listed if defined. */
+	public function test_context(): void {
+		$expected = array(
+			'arg-name' => array(
+				'type'    => $this->type_name(),
+				'context' => array( 'view', 'edit' ),
+			),
+		);
+
+		$model = $this->type_class()::on( 'arg-name' )
+			->context( 'view', 'edit' );
+
+		$this->assertSame(
+			$expected,
 			Argument_Parser::as_array( $model )
 		);
 	}

@@ -14,7 +14,6 @@ namespace PinkCrab\WP_Rest_Schema\Parser;
 
 use PinkCrab\WP_Rest_Schema\Argument\Argument;
 use PinkCrab\WP_Rest_Schema\Argument\Number_Type;
-use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Argument\Integer_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Array_Attribute_Parser;
 use PinkCrab\WP_Rest_Schema\Parser\Object_Attribute_Parser;
@@ -64,9 +63,12 @@ class Argument_Parser {
 	 */
 	public static function as_single( Argument $argument ): array {
 		$parsed = ( new self( $argument ) )->parse_as_indexed_array();
-		return count( $parsed ) < 1
-			? array()
-			: reset( $parsed );
+		if ( count( $parsed ) < 1 ) {
+			return array();
+		}
+		/** @var array<string, mixed> $first */
+		$first = reset( $parsed );
+		return $first;
 	}
 
 	/**
@@ -78,6 +80,21 @@ class Argument_Parser {
 	 */
 	public static function for_meta_data( Argument $argument ): array {
 		return self::as_list( $argument );
+	}
+
+	/**
+	 * Static constructor for register_rest_route() args.
+	 * Accepts multiple Arguments and returns a merged keyed args array.
+	 *
+	 * @param \PinkCrab\WP_Rest_Schema\Argument\Argument ...$arguments
+	 * @return array<string, mixed>
+	 */
+	public static function for_route( Argument ...$arguments ): array {
+		$args = array();
+		foreach ( $arguments as $argument ) {
+			$args = array_merge( $args, self::as_array( $argument ) );
+		}
+		return $args;
 	}
 
 	/**
@@ -157,6 +174,14 @@ class Argument_Parser {
 			$attributes['context'] = $this->argument->get_context();
 		}
 
+		if ( ! is_null( $this->argument->get_readonly() ) ) {
+			$attributes['readonly'] = $this->argument->get_readonly();
+		}
+
+		if ( ! is_null( $this->argument->get_title() ) ) {
+			$attributes['title'] = $this->argument->get_title();
+		}
+
 		return $attributes;
 	}
 
@@ -231,63 +256,4 @@ class Argument_Parser {
 
 		return $attributes;
 	}
-
-
-
-	/**
-	 * Populate Object args
-	 *
-	 * @return array<string, int|float|bool|mixed[]>
-	 */
-	public function object_attributes(): array {
-		// Bail if not a Object Argument.
-		if ( ! is_a( $this->argument, Object_Type::class ) ) {
-			return array();
-		}
-
-		/** @var Object_Type $argument */
-		$argument = $this->argument;
-
-		$attributes = array();
-
-		// Set base properties
-		$properties = $this->parse_object_properties( $argument );
-		if ( ! empty( $properties ) ) {
-			// Based on relationship type.
-			$relationship             = $argument->get_relationship();
-			$attributes['properties'] = 'allOf' === $relationship
-				? $properties
-				: array( $relationship => $properties );
-		}
-
-		return $attributes;
-	}
-
-	/**
-	 * Parsed the objects properties
-	 *
-	 * @param Object_Type $argument
-	 * @param string $property_type
-	 * @return array<string, mixed>
-	 */
-	public function parse_object_properties( Object_Type $argument, string $property_type = 'regular' ): array {
-		switch ( $property_type ) {
-			case 'additional':
-				$properties = $argument->get_additional_properties();
-				break;
-			case 'pattern':
-				$properties = $argument->get_pattern_properties();
-				break;
-			default: // Regular
-				$properties = $argument->get_properties();
-		}
-
-		return array_map(
-			function( $property ): array {
-				return ( new self( $property ) )->parse_as_list();
-			},
-			$properties
-		);
-	}
-
 }

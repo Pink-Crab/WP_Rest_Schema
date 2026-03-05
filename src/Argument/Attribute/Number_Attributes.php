@@ -30,7 +30,8 @@ trait Number_Attributes {
 	 * @return bool|null
 	 */
 	public function get_exclusive_minimum(): ?bool {
-		return $this->get_attribute( 'exclusiveMinimum' );
+		$value = $this->get_attribute( 'exclusiveMinimum' );
+		return is_bool( $value ) ? $value : null;
 	}
 
 	/**
@@ -49,7 +50,8 @@ trait Number_Attributes {
 	 * @return bool|null
 	 */
 	public function get_exclusive_maximum(): ?bool {
-		return $this->get_attribute( 'exclusiveMaximum' );
+		$value = $this->get_attribute( 'exclusiveMaximum' );
+		return is_bool( $value ) ? $value : null;
 	}
 
 		/**
@@ -68,6 +70,7 @@ trait Number_Attributes {
 	 * @return float|null
 	 */
 	public function get_multiple_of(): ?float {
-		return $this->get_attribute( 'multipleOf' );
+		$value = $this->get_attribute( 'multipleOf' );
+		return is_float( $value ) ? $value : null;
 	}
 }

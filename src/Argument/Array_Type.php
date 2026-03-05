@@ -17,7 +17,8 @@ use PinkCrab\WP_Rest_Schema\Argument\Attribute\Element_Requirements;
 
 class Array_Type extends Argument {
 
-	use Element_Requirements, Children;
+	use Element_Requirements;
+	use Children;
 
 	public function __construct( string $key ) {
 		parent::__construct( $key );
@@ -31,7 +32,10 @@ class Array_Type extends Argument {
 	 * @return self
 	 */
 	public function item( Argument $item ): self {
-		$this->attributes['items'][] = $item;
+		/** @var array<int, Argument> $items */
+		$items                     = $this->attributes['items'] ?? array();
+		$items[]                   = $item;
+		$this->attributes['items'] = $items;
 		return $this;
 	}
 
@@ -49,7 +53,9 @@ class Array_Type extends Argument {
 		}
 
 		// Create the item
-		$last_index = array_key_last( $this->attributes['items'] );
+		/** @var array<int, Argument> $items */
+		$items      = $this->attributes['items'];
+		$last_index = array_key_last( $items );
 		$item_key   = sprintf( 'item_type_%d', is_null( $last_index ) ? 0 : ( $last_index + 1 ) );
 		$item       = $this->create_child( $item_key, $type );
 
@@ -134,7 +140,9 @@ class Array_Type extends Argument {
 	 * @return array<int,Argument>|null
 	 */
 	public function get_items(): ?array {
-		return $this->get_attribute( 'items' );
+		$value = $this->get_attribute( 'items' );
+		/** @var array<int, Argument>|null $value */
+		return is_array( $value ) ? $value : null;
 	}
 
 	/**
@@ -175,7 +183,8 @@ class Array_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_min_items(): ?int {
-		return $this->get_attribute( 'minItems' );
+		$value = $this->get_attribute( 'minItems' );
+		return is_int( $value ) ? $value : null;
 	}
 
 	/**
@@ -194,7 +203,8 @@ class Array_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_max_items(): ?int {
-		return $this->get_attribute( 'maxItems' );
+		$value = $this->get_attribute( 'maxItems' );
+		return is_int( $value ) ? $value : null;
 	}
 
 	/**
@@ -214,7 +224,7 @@ class Array_Type extends Argument {
 	 * @return bool|null
 	 */
 	public function get_unique_items(): ?bool {
-		return $this->get_attribute( 'uniqueItems' );
+		$value = $this->get_attribute( 'uniqueItems' );
+		return is_bool( $value ) ? $value : null;
 	}
-
 }

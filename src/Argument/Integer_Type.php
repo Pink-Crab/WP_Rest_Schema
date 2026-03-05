@@ -49,9 +49,10 @@ class Integer_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_minimum(): ?int {
-		return \array_key_exists( 'minimum', $this->attributes )
+		$value = \array_key_exists( 'minimum', $this->attributes )
 			? $this->attributes['minimum']
 			: null;
+		return is_int( $value ) ? $value : null;
 	}
 
 	/**
@@ -71,9 +72,9 @@ class Integer_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_maximum(): ?int {
-		return \array_key_exists( 'maximum', $this->attributes )
+		$value = \array_key_exists( 'maximum', $this->attributes )
 			? $this->attributes['maximum']
 			: null;
+		return is_int( $value ) ? $value : null;
 	}
-
 }

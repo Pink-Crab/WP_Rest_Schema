@@ -37,7 +37,8 @@ class String_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_min_length(): ?int {
-		return $this->get_attribute( 'minLength' );
+		$value = $this->get_attribute( 'minLength' );
+		return is_int( $value ) ? $value : null;
 	}
 
 	/**
@@ -56,7 +57,8 @@ class String_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_max_length(): ?int {
-		return $this->get_attribute( 'maxLength' );
+		$value = $this->get_attribute( 'maxLength' );
+		return is_int( $value ) ? $value : null;
 	}
 
 	/**
@@ -75,7 +77,7 @@ class String_Type extends Argument {
 	 * @return string|null
 	 */
 	public function get_pattern(): ?string {
-		return $this->get_attribute( 'pattern' );
+		$value = $this->get_attribute( 'pattern' );
+		return is_string( $value ) ? $value : null;
 	}
-
 }

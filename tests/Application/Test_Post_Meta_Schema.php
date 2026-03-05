@@ -142,7 +142,7 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 						return $arg->required()->expected( 1, 2, 4 );
 					}
 				)
-				->string_additional_property( 'optional_string' )
+				->additional_properties( true )
 		);
 		register_meta(
 			'post',
@@ -233,7 +233,8 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 		$this->assertEquals( true, $data['meta']['object_meta']['boolean'] );
 	}
 
-	public function test_post_string() {
+	/** @testdox It should be possible to create a post with a custom string meta field with min/max length validation. */
+	public function test_post_string(): void {
 		$user_id = $this->factory->user->create( array( 'role' => 'administrator' ) );
 		$user    = wp_set_current_user( $user_id );
 		$schema  = Argument_Parser::for_meta_data(
@@ -250,7 +251,7 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 			'string_meta',
 			array(
 				'single'       => true,
-				'type'         => 'object',
+				'type'         => 'string',
 				'show_in_rest' => array(
 					'schema' => $schema,
 				),
@@ -259,7 +260,7 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 
 		$this->register_routes();
 
-		// Dispatch request,
+		// Dispatch request.
 		$dispatch = function( $string ): \WP_REST_Response {
 			return $this->dispatch_request(
 				'POST',
@@ -283,17 +284,26 @@ class Test_Post_Meta_Schema extends HTTP_TestCase {
 				}
 			);
 		};
-		$dispatch( 'ggg' );
 
-		$dispatch = function( $string ): \WP_REST_Response {
-			return $this->dispatch_request(
-				'GET',
-				'/wp/v2/posts/4',
-				array()
-			);
-		};
+		// Test fails if too short.
+		$response = $dispatch( 'a' )->get_data();
+		$this->assertEquals( 400, $response['data']['status'] );
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_too_short', $response['code'] );
+		}
 
-		// dump( $schema, $dispatch( 'ggg' )->get_data()/* , $dispatch('ggg')->get_data() */ );
+		// Test fails if too long.
+		$response = $dispatch( 'this is way too long string' )->get_data();
+		$this->assertEquals( 400, $response['data']['status'] );
+		if ( version_compare( $GLOBALS['wp_version'], '5.7', '>=' ) ) {
+			$this->assertEquals( 'rest_too_long', $response['code'] );
+		}
 
+		// Test can create post with valid string.
+		$response = $dispatch( 'valid' );
+		$this->assertEquals( 201, $response->get_status() );
+		$data = $response->get_data();
+		$this->assertArrayHasKey( 'string_meta', $data['meta'] );
+		$this->assertEquals( 'valid', $data['meta']['string_meta'] );
 	}
 }

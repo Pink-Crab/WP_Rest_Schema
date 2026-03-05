@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace PinkCrab\WP_Rest_Schema\Parser;
 
+use PinkCrab\WP_Rest_Schema\Argument\Argument;
 use PinkCrab\WP_Rest_Schema\Argument\Object_Type;
 use PinkCrab\WP_Rest_Schema\Parser\Abstract_Parser;
 
@@ -34,10 +35,9 @@ class Object_Attribute_Parser extends Abstract_Parser {
 
 		$attributes = array();
 
-		// Regular properties
-		$items = $this->parse_properties( $argument );
+		// Regular properties.
+		$items = $this->parse_properties( $argument->get_properties() );
 		if ( ! empty( $items ) ) {
-			// Based on relationship type.
 			$relationship             = $argument->get_relationship();
 			$attributes['properties'] = 'allOf' === $relationship
 				? $items
@@ -45,34 +45,49 @@ class Object_Attribute_Parser extends Abstract_Parser {
 		}
 
 		// Additional properties.
+		if ( $argument->has_additional_properties() ) {
+			$additional = $argument->get_additional_properties();
+			if ( is_bool( $additional ) ) {
+				$attributes['additionalProperties'] = $additional;
+			} elseif ( $additional instanceof Argument ) {
+				$attributes['additionalProperties'] = Argument_Parser::as_list( $additional );
+			}
+		}
+
+		// Pattern properties.
+		$pattern_props = $this->parse_properties( $argument->get_pattern_properties() );
+		if ( ! empty( $pattern_props ) ) {
+			$attributes['patternProperties'] = $pattern_props;
+		}
+
+		// Min/max properties.
+		if ( ! is_null( $argument->get_min_properties() ) ) {
+			$attributes['minProperties'] = $argument->get_min_properties();
+		}
+
+		if ( ! is_null( $argument->get_max_properties() ) ) {
+			$attributes['maxProperties'] = $argument->get_max_properties();
+		}
 
 		return $attributes;
 	}
 
 	/**
-	 * Parses the arrays items
+	 * Parses an array of Argument properties into their array representation.
 	 *
-	 * @param Object_Type $argument
-	 * @return array<int, mixed>
+	 * @param array<string, Argument> $properties
+	 * @return array<string, mixed>
 	 */
-	protected function parse_properties( Object_Type $argument ) : array {
-		$properties = array();
-
-		// $properties =
-
-		if ( empty( $argument->get_properties() ) ) {
-			return $properties;
+	protected function parse_properties( array $properties ): array {
+		if ( empty( $properties ) ) {
+			return array();
 		}
 
-		// If we only have 1 item, return as a simple array.
-		if ( count( $argument->get_properties() ) === 1 ) {
-			$properties = Argument_Parser::as_single( array_values( $argument->get_properties() )[0] );
-		} else {
-			foreach ( $argument->get_properties() as $key => $value ) {
-				$properties[ $key ] = Argument_Parser::as_single( $value );
-			}
+		$parsed = array();
+		foreach ( $properties as $key => $value ) {
+			$parsed[ $key ] = Argument_Parser::as_single( $value );
 		}
 
-		return $properties;
+		return $parsed;
 	}
 }
