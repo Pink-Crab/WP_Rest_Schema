@@ -5,10 +5,10 @@ A fluent PHP builder for WordPress REST API JSON schemas. Converts verbose neste
 [![Latest Stable Version](http://poser.pugx.org/pinkcrab/wp-rest-schema/v)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![Total Downloads](http://poser.pugx.org/pinkcrab/wp-rest-schema/downloads)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![Latest Unstable Version](http://poser.pugx.org/pinkcrab/wp-rest-schema/v/unstable)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![License](http://poser.pugx.org/pinkcrab/wp-rest-schema/license)](https://packagist.org/packages/pinkcrab/wp-rest-schema) [![PHP Version Require](http://poser.pugx.org/pinkcrab/wp-rest-schema/require/php)](https://packagist.org/packages/pinkcrab/wp-rest-schema)
 ![GitHub contributors](https://img.shields.io/github/contributors/Pink-Crab/WP_Rest_Schema?label=Contributors)
 ![GitHub issues](https://img.shields.io/github/issues-raw/Pink-Crab/WP_Rest_Schema)
-[![WordPress 6.6 Test Suite [PHP7.4-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_6.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_6.yaml)
-[![WordPress 6.7 Test Suite [PHP7.4-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_7.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_7.yaml)
-[![WordPress 6.8 Test Suite [PHP7.4-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_8.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_8.yaml)
-[![WordPress 6.9 Test Suite [PHP7.4-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_9.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_9.yaml)
+[![WordPress 6.6 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_6.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_6.yaml)
+[![WordPress 6.7 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_7.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_7.yaml)
+[![WordPress 6.8 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_8.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_8.yaml)
+[![WordPress 6.9 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_9.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_9.yaml)
 
 ****
 
@@ -60,7 +60,7 @@ register_post_meta( 'post', 'fixed_in', array(
 composer require pinkcrab/wp-rest-schema
 ```
 
-**Requirements:** PHP >= 7.4 | WordPress >= 6.6
+**Requirements:** PHP >= 8.0 | WordPress >= 6.6
 
 ****
 
@@ -211,5 +211,5 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log
 
-* 0.2.0 - Added Schema builder, readonly/title support, field() alias, for_route() helper, additionalProperties redesign, FORMAT_URI fix, PHP 7.4+/WP 6.6
+* 1.0.0-RC1 - Added Schema builder, readonly/title support, field() alias, for_route() helper, additionalProperties redesign, FORMAT_URI fix, PHPStan level 9, WPCS 3, PHP 8.0+/WP 6.6+
 * 0.1.0 - Initial version
