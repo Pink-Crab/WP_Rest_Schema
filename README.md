@@ -57,7 +57,7 @@ register_post_meta( 'post', 'fixed_in', array(
 ## Setup
 
 ```bash
-composer require pinkcrab/wp-rest-schema
+$ composer require pinkcrab/wp-rest-schema
 ```
 
 **Requirements:** PHP >= 8.0 | WordPress >= 6.6
