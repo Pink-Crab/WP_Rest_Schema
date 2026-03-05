@@ -18,7 +18,8 @@ use PinkCrab\WP_Rest_Schema\Argument\Attribute\Element_Requirements;
 
 class Object_Type extends Argument {
 
-	use Children, Element_Requirements;
+	use Children;
+	use Element_Requirements;
 
 	/**
 	 * Properties
@@ -29,10 +30,11 @@ class Object_Type extends Argument {
 
 	/**
 	 * Additional properties (optional)
+	 * Can be a boolean (allow/disallow) or a single Argument schema.
 	 *
-	 * @var array<string, Argument>
+	 * @var bool|Argument|null
 	 */
-	protected $additional_properties = array();
+	protected $additional_properties;
 
 	/**
 	 * Properties based on the pattern.
@@ -62,7 +64,8 @@ class Object_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_min_properties(): ?int {
-		return $this->get_attribute( 'minProperties' );
+		$value = $this->get_attribute( 'minProperties' );
+		return is_int( $value ) ? $value : null;
 	}
 
 	/**
@@ -81,7 +84,8 @@ class Object_Type extends Argument {
 	 * @return int|null
 	 */
 	public function get_max_properties(): ?int {
-		return $this->get_attribute( 'maxProperties' );
+		$value = $this->get_attribute( 'maxProperties' );
+		return is_int( $value ) ? $value : null;
 	}
 
 
@@ -212,121 +216,43 @@ class Object_Type extends Argument {
 	 */
 
 	/**
-	 * Adds a additional property
+	 * Sets whether additional properties are allowed (boolean).
 	 *
-	 * @param string $name           The property name
-	 * @param string $type           The type class name
-	 * @param callable|null $config
+	 * @param bool $allowed
 	 * @return static
 	 */
-	protected function add_additional_property( string $name, string $type, ?callable $config = null ): self {
-		$item                                 = $this->create_child( $name, $type )->name( $name );
-		$this->additional_properties[ $name ] = is_null( $config ) ? $item : $config( $item );
+	public function additional_properties( bool $allowed ): self {
+		$this->additional_properties = $allowed;
 		return $this;
 	}
 
 	/**
-	 * Creates a string typed, additional property.
+	 * Sets a schema definition for additional properties.
 	 *
-	 * @param string $name
-	 * @param callable|null $config
+	 * @param Argument $schema
 	 * @return static
 	 */
-	public function string_additional_property( string $name, ?callable $config = null ): self {
-		return $this->add_additional_property( $name, Argument::TYPE_STRING, $config );
-	}
-
-		/**
-	 * Creates a number typed, additional property.
-	 *
-	 * @param string $name
-	 * @param callable|null $config
-	 * @return static
-	 */
-	public function number_additional_property( string $name, ?callable $config = null ): self {
-		return $this->add_additional_property( $name, Argument::TYPE_NUMBER, $config );
+	public function additional_properties_schema( Argument $schema ): self {
+		$this->additional_properties = $schema;
+		return $this;
 	}
 
 	/**
-	 * Creates an integer typed, additional property.
+	 * Gets the additional properties value.
 	 *
-	 * @param string $name
-	 * @param callable|null $config
-	 * @return static
+	 * @return bool|Argument|null
 	 */
-	public function integer_additional_property( string $name, ?callable $config = null ): self {
-		return $this->add_additional_property( $name, Argument::TYPE_INTEGER, $config );
-	}
-
-	/**
-	 * Creates a null typed, additional property.
-	 *
-	 * @param string $name
-	 * @param callable|null $config
-	 * @return static
-	 */
-	public function null_additional_property( string $name, ?callable $config = null ): self {
-		return $this->add_additional_property( $name, Argument::TYPE_NULL, $config );
-	}
-
-	/**
-	 * Creates a boolean typed, additional property.
-	 *
-	 * @param string $name
-	 * @param callable|null $config
-	 * @return static
-	 */
-	public function boolean_additional_property( string $name, ?callable $config = null ): self {
-		return $this->add_additional_property( $name, Argument::TYPE_BOOLEAN, $config );
-	}
-
-	/**
-	 * Creates an array typed, additional property.
-	 *
-	 * @param string $name
-	 * @param callable|null $config
-	 * @return static
-	 */
-	public function array_additional_property( string $name, ?callable $config = null ): self {
-		return $this->add_additional_property( $name, Argument::TYPE_ARRAY, $config );
-	}
-
-	/**
-	 * Creates an object typed, additional property.
-	 *
-	 * @param string $name
-	 * @param callable|null $config
-	 * @return static
-	 */
-	public function object_additional_property( string $name, ?callable $config = null ): self {
-		return $this->add_additional_property( $name, Argument::TYPE_OBJECT, $config );
-	}
-
-	/**
-	 * Gets all the additional properties for the object.
-	 *
-	 * @return array<string, Argument>
-	 */
-	public function get_additional_properties(): array {
+	public function get_additional_properties() {
 		return $this->additional_properties;
 	}
 
 	/**
-	 * Checks if any additional properties defined.
+	 * Checks if additional properties has been set.
 	 *
 	 * @return bool
 	 */
 	public function has_additional_properties(): bool {
-		return ! empty( $this->additional_properties );
-	}
-
-	/**
-	 * Gets the count of additional properties.
-	 *
-	 * @return int
-	 */
-	public function count_additional_properties(): int {
-		return count( $this->additional_properties );
+		return ! is_null( $this->additional_properties );
 	}
 
 	/**

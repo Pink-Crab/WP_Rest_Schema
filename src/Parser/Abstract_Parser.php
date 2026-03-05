@@ -44,5 +44,4 @@ abstract class Abstract_Parser {
 	 * @return array<string, mixed>
 	 */
 	abstract public function parse_attributes(): array;
-
 }

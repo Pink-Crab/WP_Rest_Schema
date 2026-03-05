@@ -48,7 +48,8 @@ class Number_Type extends Argument {
 	 * @return float|null
 	 */
 	public function get_minimum(): ?float {
-		return $this->get_attribute( 'minimum' );
+		$value = $this->get_attribute( 'minimum' );
+		return is_float( $value ) ? $value : null;
 	}
 
 	/**
@@ -67,6 +68,7 @@ class Number_Type extends Argument {
 	 * @return float|null
 	 */
 	public function get_maximum(): ?float {
-		return $this->get_attribute( 'maximum' );
+		$value = $this->get_attribute( 'maximum' );
+		return is_float( $value ) ? $value : null;
 	}
 }
