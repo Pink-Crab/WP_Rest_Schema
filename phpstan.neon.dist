@@ -8,5 +8,3 @@ parameters:
         - %currentWorkingDirectory%/src/
     excludePaths:
         - %currentWorkingDirectory%/tests/*
-    bootstrapFiles:
-        - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
