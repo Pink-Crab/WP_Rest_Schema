@@ -64,6 +64,39 @@ $schema = Schema::on( 'settings' )
     ->additional_properties_schema( String_Type::on( 'value' ) );
 ```
 
+### `required_properties( string ...$names ): self`
+
+Mark property names as required at the parent-object level. Forwards to [`Object_Type::required_properties()`](Object-Type.md#required_properties-string-names-self). Emits a draft-4 style `required: ['a','b']` array in the parsed schema.
+
+```php
+$schema = Schema::on( 'user' )
+    ->integer_property( 'id' )
+    ->string_property( 'email' )
+    ->required_properties( 'id', 'email' );
+```
+
+### `get_context_param( array $args = array() ): array`
+
+Build the `context` collection param descriptor, mirroring `WP_REST_Controller::get_context_param()`. Derives `enum` from the union of `context` values set on the schema's properties (unique, reverse-sorted) and returns the standard param shape.
+
+```php
+$schema = Schema::on( 'post' )
+    ->integer_property( 'id', fn( $p ) => $p->context( 'view', 'edit', 'embed' ) )
+    ->string_property( 'title', fn( $p ) => $p->context( 'view', 'edit' ) );
+
+$param = $schema->get_context_param();
+// [
+//   'description'       => 'Scope under which the request is made; ...',
+//   'type'              => 'string',
+//   'sanitize_callback' => 'sanitize_key',
+//   'validate_callback' => 'rest_validate_request_arg',
+//   'enum'              => ['view', 'embed', 'edit'],
+// ]
+
+// With overrides:
+$param = $schema->get_context_param( array( 'default' => 'view' ) );
+```
+
 ### `to_array(): array`
 
 Convert the schema to the array format WordPress expects.

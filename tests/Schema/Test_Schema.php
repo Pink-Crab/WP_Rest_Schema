@@ -157,4 +157,40 @@ class Test_Schema extends WP_UnitTestCase {
 		$this->assertTrue( $schema['properties']['title']['required'] );
 		$this->assertEquals( array( 'publish', 'draft', 'pending' ), $schema['properties']['status']['enum'] );
 	}
+
+	/** @testdox get_context_param() returns the base param shape when no properties are set. */
+	public function test_get_context_param_without_properties(): void {
+		$schema = Schema::on( 'empty' );
+		$param  = $schema->get_context_param();
+
+		$this->assertSame( 'string', $param['type'] );
+		$this->assertArrayHasKey( 'description', $param );
+		$this->assertArrayHasKey( 'sanitize_callback', $param );
+		$this->assertArrayHasKey( 'validate_callback', $param );
+		$this->assertArrayNotHasKey( 'enum', $param );
+	}
+
+	/** @testdox get_context_param() derives enum from the union of property contexts, unique and reverse-sorted. */
+	public function test_get_context_param_derives_enum_from_properties(): void {
+		$schema = Schema::on( 'post' )
+			->integer_property( 'id', fn( $p ) => $p->context( 'view', 'edit', 'embed' ) )
+			->string_property( 'title', fn( $p ) => $p->context( 'view', 'edit' ) )
+			->string_property( 'content', fn( $p ) => $p->context( 'view' ) );
+
+		$param = $schema->get_context_param();
+
+		$this->assertArrayHasKey( 'enum', $param );
+		$this->assertSame( array( 'view', 'embed', 'edit' ), $param['enum'] );
+	}
+
+	/** @testdox get_context_param() merges caller-provided args on top of the defaults. */
+	public function test_get_context_param_merges_caller_args(): void {
+		$schema = Schema::on( 'post' )
+			->string_property( 'title', fn( $p ) => $p->context( 'view', 'edit' ) );
+
+		$param = $schema->get_context_param( array( 'default' => 'view' ) );
+
+		$this->assertSame( 'view', $param['default'] );
+		$this->assertSame( array( 'view', 'edit' ), $param['enum'] );
+	}
 }

@@ -213,6 +213,6 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log
 
-* 1.0.0 - Combinators (`One_Of_Type` / `Any_Of_Type`), null/falsy defaults, array items last-wins, `arg_options`, `required_properties`, mixed enums; deprecated `name()` and `all_of()`.
+* 1.0.0 - Combinators (`One_Of_Type` / `Any_Of_Type`), null/falsy defaults, array items last-wins, `arg_options`, `required_properties`, mixed enums, `Schema::get_context_param()`, output-keys canary test; deprecated `name()` and `all_of()`.
 * 1.0.0-RC1 - Added Schema builder, readonly/title support, field() alias, for_route() helper, additionalProperties redesign, FORMAT_URI fix, PHPStan level 9, WPCS 3, PHP 8.0+/WP 6.6+
 * 0.1.0 - Initial version
