@@ -378,6 +378,28 @@ class Test_Object_Type extends WP_UnitTestCase {
 		);
 	}
 
+	/** @testdox has_properties() and count_properties() reflect the registered properties. */
+	public function test_properties_helpers(): void {
+		$obj = Object_Type::on( 'user' );
+		$this->assertFalse( $obj->has_properties() );
+		$this->assertSame( 0, $obj->count_properties() );
+
+		$obj->string_property( 'email' )->integer_property( 'id' );
+		$this->assertTrue( $obj->has_properties() );
+		$this->assertSame( 2, $obj->count_properties() );
+	}
+
+	/** @testdox has_pattern_properties() and count_pattern_properties() reflect the registered pattern properties. */
+	public function test_pattern_properties_helpers(): void {
+		$obj = Object_Type::on( 'bag' );
+		$this->assertFalse( $obj->has_pattern_properties() );
+		$this->assertSame( 0, $obj->count_pattern_properties() );
+
+		$obj->string_pattern_property( '^[a-z]+$' );
+		$this->assertTrue( $obj->has_pattern_properties() );
+		$this->assertSame( 1, $obj->count_pattern_properties() );
+	}
+
 	/** @testdox required_properties() should coexist with per-property required booleans. */
 	public function test_required_properties_coexists_with_per_property_required(): void {
 		$model = Object_Type::on( 'user' )

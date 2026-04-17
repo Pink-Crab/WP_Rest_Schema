@@ -158,6 +158,35 @@ class Test_Schema extends WP_UnitTestCase {
 		$this->assertEquals( array( 'publish', 'draft', 'pending' ), $schema['properties']['status']['enum'] );
 	}
 
+	/** @testdox to_array() passes through min/maxProperties and patternProperties from the internal Object_Type. */
+	public function test_to_array_emits_min_max_and_pattern_properties(): void {
+		$schema = Schema::on( 'settings' );
+		$schema->get_object()
+			->min_properties( 1 )
+			->max_properties( 10 )
+			->string_pattern_property( '^[a-z]+$' );
+
+		$array = $schema->to_array();
+
+		$this->assertSame( 1, $array['minProperties'] );
+		$this->assertSame( 10, $array['maxProperties'] );
+		$this->assertArrayHasKey( 'patternProperties', $array );
+		$this->assertArrayHasKey( '^[a-z]+$', $array['patternProperties'] );
+	}
+
+	/** @testdox number_property(), boolean_property(), null_property() forwarders register on the internal Object_Type. */
+	public function test_schema_forwarders_for_number_boolean_null_property(): void {
+		$schema = Schema::on( 'mix' )
+			->number_property( 'score' )
+			->boolean_property( 'active' )
+			->null_property( 'nothing' );
+
+		$props = $schema->get_object()->get_properties();
+		$this->assertArrayHasKey( 'score', $props );
+		$this->assertArrayHasKey( 'active', $props );
+		$this->assertArrayHasKey( 'nothing', $props );
+	}
+
 	/** @testdox get_context_param() returns the base param shape when no properties are set. */
 	public function test_get_context_param_without_properties(): void {
 		$schema = Schema::on( 'empty' );
