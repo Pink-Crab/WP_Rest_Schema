@@ -154,7 +154,7 @@ class Argument_Parser {
 			$attributes['description'] = $this->argument->get_description();
 		}
 
-		if ( ! is_null( $this->argument->get_default() ) ) {
+		if ( $this->argument->has_default() ) {
 			$attributes['default'] = $this->argument->get_default();
 		}
 
@@ -197,6 +197,12 @@ class Argument_Parser {
 	 * @return array<string, mixed>
 	 */
 	protected function get_type_attributes(): array {
+		// Schema-root combinators (One_Of_Type, Any_Of_Type) have no primitive
+		// `type` and are dispatched by class rather than by the type switch.
+		if ( is_a( $this->argument, \PinkCrab\WP_Rest_Schema\Argument\Combinator_Type::class ) ) {
+			return Combinator_Attribute_Parser::parse( $this->argument );
+		}
+
 		switch ( $this->argument->get_type() ) {
 			case Argument::TYPE_STRING:
 				return String_Attribute_Parser::parse( $this->argument );

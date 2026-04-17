@@ -63,27 +63,45 @@ class Array_Attribute_Parser extends Abstract_Parser {
 	}
 
 	/**
-	 * Parses the arrays items
+	 * Parses the array's items.
+	 *
+	 * WP treats `items` as a single schema applied to every element. JSON
+	 * Schema tuple-form (`items: [schemaA, schemaB]`) is not honoured.
+	 *
+	 * - If no combinator is set (default `allOf`) and multiple item schemas
+	 *   have been added, the LAST item wins and `items` is emitted as a
+	 *   single schema.
+	 * - If a combinator (`oneOf` / `anyOf`) is set, all added item schemas
+	 *   are emitted as a list under that key — producing valid WP schema
+	 *   (`items: { oneOf: [schemaA, schemaB] }`).
 	 *
 	 * @param Array_Type $argument
-	 * @return array<int, mixed>
+	 * @return array<int|string, mixed>
 	 */
 	protected function parse_array_items( Array_Type $argument ): array {
-		$items = array();
-
 		if ( ! $argument->has_items() ) {
+			return array();
+		}
+
+		/** @var array<int, \PinkCrab\WP_Rest_Schema\Argument\Argument> $raw_items */
+		$raw_items    = array_values( $argument->get_items() ?? array() );
+		$relationship = $argument->get_relationship();
+
+		// Combinator set (oneOf / anyOf) — keep the full list so it can be
+		// wrapped under the combinator key by the caller.
+		if ( 'allOf' !== $relationship ) {
+			$items = array();
+			foreach ( $raw_items as $item ) {
+				$items[] = Argument_Parser::as_list( $item );
+			}
 			return $items;
 		}
 
-		// If we only have 1 item, return as a simple array.
-		if ( $argument->item_count() === 1 ) {
-			$items = Argument_Parser::as_list( array_values( $argument->get_items() )[0] ); // @phpstan-ignore-line, already checked if array empty.
-		} else {
-			foreach ( $argument->get_items() ?? array() as $key => $value ) {
-				$items[] = Argument_Parser::as_list( $value );
-			}
+		// No combinator — WP only honours a single items schema. Last wins.
+		$last_item = end( $raw_items );
+		if ( false === $last_item ) {
+			return array();
 		}
-
-		return $items;
+		return Argument_Parser::as_list( $last_item );
 	}
 }

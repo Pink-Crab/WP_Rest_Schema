@@ -108,9 +108,19 @@ class Argument {
 	/**
 	 * The default value
 	 *
-	 * @var string|int|float|bool|null
+	 * @var string|int|float|bool|array<mixed>|object|null
 	 */
 	protected $default;
+
+	/**
+	 * Whether a default has been explicitly set.
+	 *
+	 * Tracks the set-ness separately from the value so that null can be
+	 * emitted as a default (valid when type includes 'null').
+	 *
+	 * @var bool
+	 */
+	protected $has_default_set = false;
 
 	/**
 	 * Optional format to expect value.
@@ -204,7 +214,7 @@ class Argument {
 	 * @return static
 	 */
 	public function validation( callable $validation ): self {
-		$this->validation = $validation; // @phpstan-ignore assign.propertyType
+		$this->validation = $validation;
 		return $this;
 	}
 
@@ -233,7 +243,7 @@ class Argument {
 	/**
 	 * Get the default value
 	 *
-	 * @return string|int|float|bool|null
+	 * @return string|int|float|bool|array<mixed>|object|null
 	 */
 	public function get_default() {
 		return $this->default;
@@ -245,17 +255,18 @@ class Argument {
 	 * @return bool
 	 */
 	public function has_default(): bool {
-		return ! is_null( $this->default );
+		return $this->has_default_set;
 	}
 
 	/**
 	 * Set the default value
 	 *
-	 * @param string|int|float|bool $default_value  The default value
+	 * @param string|int|float|bool|array<mixed>|object|null $default_value  The default value
 	 * @return static
 	 */
 	public function default( $default_value ): self {
-		$this->default = $default_value;
+		$this->default         = $default_value;
+		$this->has_default_set = true;
 		return $this;
 	}
 

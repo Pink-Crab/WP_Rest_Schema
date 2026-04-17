@@ -131,6 +131,38 @@ class Test_Argument extends WP_UnitTestCase {
 		$this->assertEquals( 'DEF', $argument->get_default() );
 	}
 
+	/** @testdox Setting a default of false should count as a default being set and should be retrievable. */
+	public function test_default_false_is_tracked_as_set(): void {
+		$argument = new Argument( 'flag' );
+		$argument->default( false );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertSame( false, $argument->get_default() );
+	}
+
+	/** @testdox Setting a default of 0 should count as a default being set and should be retrievable. */
+	public function test_default_zero_is_tracked_as_set(): void {
+		$argument = new Argument( 'count' );
+		$argument->default( 0 );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertSame( 0, $argument->get_default() );
+	}
+
+	/** @testdox Setting a default of an empty string should count as a default being set and should be retrievable. */
+	public function test_default_empty_string_is_tracked_as_set(): void {
+		$argument = new Argument( 'label' );
+		$argument->default( '' );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertSame( '', $argument->get_default() );
+	}
+
+	/** @testdox Setting a default of null should count as a default being set and should be retrievable (for unions that include null). */
+	public function test_default_null_is_tracked_as_set(): void {
+		$argument = new Argument( 'optional' );
+		$argument->default( null );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertNull( $argument->get_default() );
+	}
+
 	/** @testdox It should be possible to set a description to an argument. */
 	public function test_argument_description(): void {
 		$argument = new Argument( 'id' );

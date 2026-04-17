@@ -53,6 +53,39 @@ $arg = String_Type::field( 'value' )
 // type becomes ['string', 'null']
 ```
 
+### Combinators vs unions — `One_Of_Type` / `Any_Of_Type`
+
+Use `union_with_type()` when the value can be one of several primitive types but shares the SAME attributes (`minLength`, `minimum`, etc.). Use `One_Of_Type` / `Any_Of_Type` when each variant needs its OWN distinct attributes.
+
+**Union — shared attributes, multi-primitive type array:**
+
+```php
+String_Type::on( 'slug' )
+    ->min_length( 3 )
+    ->union_with_type( 'null' );
+
+// Emits: ['slug' => ['type' => ['string','null'], 'minLength' => 3]]
+```
+
+Here `minLength: 3` applies to both members of the union.
+
+**Combinator — distinct per-variant attributes:**
+
+```php
+One_Of_Type::on( 'thing' )
+    ->variant( String_Type::on( 'thing' )->min_length( 3 ) )
+    ->variant( Integer_Type::on( 'thing' )->minimum( 1 ) );
+
+// Emits: ['thing' => ['oneOf' => [
+//     ['type' => 'string',  'minLength' => 3],
+//     ['type' => 'integer', 'minimum'   => 1],
+// ]]]
+```
+
+`minLength` only applies to the string variant; `minimum` only to the integer variant. Union can't express that.
+
+`One_Of_Type` requires EXACTLY ONE variant to match (`rest_find_one_matching_schema`). `Any_Of_Type` accepts ANY variant that matches (`rest_find_any_matching_schema`). Both emit with no outer `type` — the combinator keyword sits at the schema root.
+
 ### `description( string $description ): self`
 
 Set a human-readable description for the argument.
@@ -64,12 +97,26 @@ $arg = String_Type::field( 'email' )
 
 ### `default( mixed $default ): self`
 
-Set a default value for the argument.
+Set a default value for the argument. Accepts `string`, `int`, `float`, `bool`, `array`, `object`, or `null` — whatever matches the schema's declared `type` (or one of its union members).
 
 ```php
 $arg = Integer_Type::field( 'page' )
     ->default( 1 );
 ```
+
+Falsy and null values are fully supported — `default(false)`, `default(0)`, `default('')`, `default(null)` all count as explicit defaults and emit as `'default' => <value>` in the parsed schema. `has_default()` will return `true` after any of them.
+
+```php
+$flag = Boolean_Type::field( 'enabled' )->default( false );
+// Emits: ['enabled' => ['type' => 'boolean', 'default' => false]]
+
+$nullable = String_Type::field( 'slug' )
+    ->union_with_type( Argument::TYPE_NULL )
+    ->default( null );
+// Emits: ['slug' => ['type' => ['string','null'], 'default' => null]]
+```
+
+An argument with no `default()` call will NOT emit a `default` key at all.
 
 ### `required( bool $required = true ): self`
 
