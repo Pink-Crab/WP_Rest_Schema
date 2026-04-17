@@ -156,9 +156,16 @@ $arg = String_Type::field( 'email' )
 
 Set the allowed values (maps to `enum` in the schema). Multiple calls are additive.
 
+Accepts any JSON-comparable value — strings, ints, floats, booleans, `null`, arrays, and objects — matching WP's `in_array(..., $enum, true)` semantics.
+
 ```php
 $arg = String_Type::field( 'status' )
     ->expected( 'publish', 'draft', 'pending' );
+
+// Null + string mix (for union schemas that include 'null'):
+$arg = String_Type::field( 'slug' )
+    ->union_with_type( 'null' )
+    ->expected( 'home', 'about', null );
 
 // Can also be called multiple times
 $arg = String_Type::field( 'status' )
@@ -175,14 +182,27 @@ $arg = Integer_Type::field( 'id' )
     ->context( 'view', 'edit', 'embed' );
 ```
 
-### `name( string $name ): self`
+### ~~`name( string $name ): self`~~ *(deprecated)*
 
-Set a display name for the argument.
+> **Deprecated in 1.0.0** — calling `name()` triggers `E_USER_DEPRECATED` and does nothing.
+>
+> `name` was never a valid JSON Schema / WP REST keyword and was leaking from internal child-indexing into the parsed output. Removed from emission; the setter is kept as a no-op for backwards compatibility and will be removed in a future release. For user-facing display labels use [`title()`](#title-string-title-self) instead.
+
+### `arg_options( array $options ): self`
+
+Attach a raw `arg_options` array to the argument. The array is emitted verbatim under the `arg_options` key in the parsed schema, letting WP REST controllers override `sanitize_callback` / `validate_callback` (or any other WP arg option) per property without replacing the callbacks on the Argument itself.
 
 ```php
-$arg = String_Type::field( 'email' )
-    ->name( 'Email Address' );
+$arg = String_Type::field( 'slug' )
+    ->arg_options(
+        array(
+            'sanitize_callback' => 'sanitize_title',
+            'validate_callback' => 'rest_validate_request_arg',
+        )
+    );
 ```
+
+See `WP_REST_Controller::add_additional_fields_schema()` in WP core for how this merges into route args.
 
 ### `validation( callable $callback ): self`
 

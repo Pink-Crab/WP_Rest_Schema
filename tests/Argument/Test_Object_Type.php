@@ -67,7 +67,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->string_property(
 			'property_name',
 			function( String_Type $type ): String_Type {
-				$this->assertEquals( 'property_name', $type->get_name() );
 				$this->assertInstanceOf( String_Type::class, $type );
 				return $type;
 			}
@@ -78,7 +77,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 
 		$type = $arg->get_properties()['property_name'];
 		$this->assertInstanceOf( String_Type::class, $type );
-		$this->assertEquals( 'property_name', $type->get_name() );
 	}
 
 	/** @testdox Can set a number property */
@@ -87,7 +85,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->number_property(
 			'property_name',
 			function( Number_Type $type ): Number_Type {
-				$this->assertEquals( 'property_name', $type->get_name() );
 				$this->assertInstanceOf( Number_Type::class, $type );
 				return $type;
 			}
@@ -97,7 +94,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'property_name', $arg->get_properties() );
 		$type = $arg->get_properties()['property_name'];
 		$this->assertInstanceOf( Number_Type::class, $type );
-		$this->assertEquals( 'property_name', $type->get_name() );
 	}
 
 	/** @testdox Can set a integer property */
@@ -106,7 +102,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->integer_property(
 			'property_name',
 			function( Integer_Type $type ): Integer_Type {
-				$this->assertEquals( 'property_name', $type->get_name() );
 				$this->assertInstanceOf( Integer_Type::class, $type );
 				return $type;
 			}
@@ -116,7 +111,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'property_name', $arg->get_properties() );
 		$type = $arg->get_properties()['property_name'];
 		$this->assertInstanceOf( Integer_Type::class, $type );
-		$this->assertEquals( 'property_name', $type->get_name() );
 	}
 
 	/** @testdox Can set a null property */
@@ -125,7 +119,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->null_property(
 			'property_name',
 			function( Null_Type $type ): Null_Type {
-				$this->assertEquals( 'property_name', $type->get_name() );
 				$this->assertInstanceOf( Null_Type::class, $type );
 				return $type;
 			}
@@ -135,7 +128,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'property_name', $arg->get_properties() );
 		$type = $arg->get_properties()['property_name'];
 		$this->assertInstanceOf( Null_Type::class, $type );
-		$this->assertEquals( 'property_name', $type->get_name() );
 	}
 
 	/** @testdox Can set a boolean property */
@@ -144,7 +136,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->boolean_property(
 			'property_name',
 			function( Boolean_Type $type ): Boolean_Type {
-				$this->assertEquals( 'property_name', $type->get_name() );
 				$this->assertInstanceOf( Boolean_Type::class, $type );
 				return $type;
 			}
@@ -154,7 +145,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'property_name', $arg->get_properties() );
 		$type = $arg->get_properties()['property_name'];
 		$this->assertInstanceOf( Boolean_Type::class, $type );
-		$this->assertEquals( 'property_name', $type->get_name() );
 	}
 
 	/** @testdox Can set a array property */
@@ -163,7 +153,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->array_property(
 			'property_name',
 			function( Array_Type $type ): Array_Type {
-				$this->assertEquals( 'property_name', $type->get_name() );
 				$this->assertInstanceOf( Array_Type::class, $type );
 				return $type;
 			}
@@ -173,7 +162,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'property_name', $arg->get_properties() );
 		$type = $arg->get_properties()['property_name'];
 		$this->assertInstanceOf( Array_Type::class, $type );
-		$this->assertEquals( 'property_name', $type->get_name() );
 	}
 
 	/** @testdox Can set a object property */
@@ -182,7 +170,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->object_property(
 			'property_name',
 			function( Object_Type $type ): Object_Type {
-				$this->assertEquals( 'property_name', $type->get_name() );
 				$this->assertInstanceOf( Object_Type::class, $type );
 				return $type;
 			}
@@ -192,7 +179,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( 'property_name', $arg->get_properties() );
 		$type = $arg->get_properties()['property_name'];
 		$this->assertInstanceOf( Object_Type::class, $type );
-		$this->assertEquals( 'property_name', $type->get_name() );
 	}
 
 	/**
@@ -245,7 +231,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->string_pattern_property(
 			'^\\w+$',
 			function( String_Type $type ): String_Type {
-				$this->assertEquals( '^\\w+$', $type->get_name() );
 				$this->assertInstanceOf( String_Type::class, $type );
 				return $type;
 			}
@@ -256,7 +241,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( String_Type::class, $type );
-		$this->assertEquals( '^\\w+$', $type->get_name() );
 	}
 
 	/** @testdox Can set a number pattern property */
@@ -265,7 +249,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->number_pattern_property(
 			'^\\w+$',
 			function( Number_Type $type ): Number_Type {
-				$this->assertEquals( '^\\w+$', $type->get_name() );
 				$this->assertInstanceOf( Number_Type::class, $type );
 				return $type;
 			}
@@ -275,7 +258,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( '^\\w+$', $arg->get_pattern_properties() );
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( Number_Type::class, $type );
-		$this->assertEquals( '^\\w+$', $type->get_name() );
 	}
 
 	/** @testdox Can set a integer pattern property */
@@ -284,7 +266,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->integer_pattern_property(
 			'^\\w+$',
 			function( Integer_Type $type ): Integer_Type {
-				$this->assertEquals( '^\\w+$', $type->get_name() );
 				$this->assertInstanceOf( Integer_Type::class, $type );
 				return $type;
 			}
@@ -294,7 +275,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( '^\\w+$', $arg->get_pattern_properties() );
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( Integer_Type::class, $type );
-		$this->assertEquals( '^\\w+$', $type->get_name() );
 	}
 
 	/** @testdox Can set a null pattern property */
@@ -303,7 +283,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->null_pattern_property(
 			'^\\w+$',
 			function( Null_Type $type ): Null_Type {
-				$this->assertEquals( '^\\w+$', $type->get_name() );
 				$this->assertInstanceOf( Null_Type::class, $type );
 				return $type;
 			}
@@ -313,7 +292,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( '^\\w+$', $arg->get_pattern_properties() );
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( Null_Type::class, $type );
-		$this->assertEquals( '^\\w+$', $type->get_name() );
 	}
 
 	/** @testdox Can set a boolean pattern property */
@@ -322,7 +300,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->boolean_pattern_property(
 			'^\\w+$',
 			function( Boolean_Type $type ): Boolean_Type {
-				$this->assertEquals( '^\\w+$', $type->get_name() );
 				$this->assertInstanceOf( Boolean_Type::class, $type );
 				return $type;
 			}
@@ -332,7 +309,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( '^\\w+$', $arg->get_pattern_properties() );
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( Boolean_Type::class, $type );
-		$this->assertEquals( '^\\w+$', $type->get_name() );
 	}
 
 	/** @testdox Can set a array pattern property */
@@ -341,7 +317,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->array_pattern_property(
 			'^\\w+$',
 			function( Array_Type $type ): Array_Type {
-				$this->assertEquals( '^\\w+$', $type->get_name() );
 				$this->assertInstanceOf( Array_Type::class, $type );
 				return $type;
 			}
@@ -351,7 +326,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( '^\\w+$', $arg->get_pattern_properties() );
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( Array_Type::class, $type );
-		$this->assertEquals( '^\\w+$', $type->get_name() );
 	}
 
 	/** @testdox Can set a object pattern property */
@@ -360,7 +334,6 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$arg->object_pattern_property(
 			'^\\w+$',
 			function( Object_Type $type ): Object_Type {
-				$this->assertEquals( '^\\w+$', $type->get_name() );
 				$this->assertInstanceOf( Object_Type::class, $type );
 				return $type;
 			}
@@ -370,6 +343,55 @@ class Test_Object_Type extends WP_UnitTestCase {
 		$this->assertArrayHasKey( '^\\w+$', $arg->get_pattern_properties() );
 		$type = $arg->get_pattern_properties()['^\\w+$'];
 		$this->assertInstanceOf( Object_Type::class, $type );
-		$this->assertEquals( '^\\w+$', $type->get_name() );
+	}
+
+	/** @testdox required_properties() should store names for parent-level required array emission. */
+	public function test_required_properties_setter_and_getter(): void {
+		$obj = Object_Type::on( 'user' );
+		$this->assertSame( array(), $obj->get_required_properties() );
+
+		$obj->required_properties( 'id', 'email' );
+		$this->assertSame( array( 'id', 'email' ), $obj->get_required_properties() );
+	}
+
+	/** @testdox Object_Type should emit required as a sibling array of property names at the parent level. */
+	public function test_required_properties_emitted_at_object_level(): void {
+		$expected = array(
+			'user' => array(
+				'type'       => 'object',
+				'properties' => array(
+					'id'    => array( 'type' => 'integer' ),
+					'email' => array( 'type' => 'string' ),
+				),
+				'required'   => array( 'id', 'email' ),
+			),
+		);
+
+		$model = Object_Type::on( 'user' )
+			->integer_property( 'id' )
+			->string_property( 'email' )
+			->required_properties( 'id', 'email' );
+
+		$this->assertSame(
+			$expected,
+			\PinkCrab\WP_Rest_Schema\Parser\Argument_Parser::as_array( $model )
+		);
+	}
+
+	/** @testdox required_properties() should coexist with per-property required booleans. */
+	public function test_required_properties_coexists_with_per_property_required(): void {
+		$model = Object_Type::on( 'user' )
+			->string_property(
+				'email',
+				function ( $p ) {
+					return $p->required( true );
+				}
+			)
+			->string_property( 'nickname' )
+			->required_properties( 'email', 'nickname' );
+
+		$parsed = \PinkCrab\WP_Rest_Schema\Parser\Argument_Parser::as_array( $model );
+		$this->assertSame( array( 'email', 'nickname' ), $parsed['user']['required'] );
+		$this->assertTrue( $parsed['user']['properties']['email']['required'] );
 	}
 }

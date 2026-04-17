@@ -143,10 +143,8 @@ class Test_Array_Type_Parser extends Abstract_Parser_Testcase {
 				'type'  => 'array',
 				'items' => array(
 					'type'  => 'array',
-					'name'  => '1st',
 					'items' => array(
 						'type'  => 'array',
-						'name'  => '2nd',
 						'items' => array(
 							'type' => 'string',
 						),
@@ -159,11 +157,9 @@ class Test_Array_Type_Parser extends Abstract_Parser_Testcase {
 			->array_item(
 				function( Array_Type $first_generation ): Array_Type {
 					return $first_generation
-						->name( '1st' )
 						->array_item(
 							function ( Array_Type $second_generation ): Array_Type {
 								return $second_generation
-									->name( '2nd' )
 									->string_item();
 							}
 						);

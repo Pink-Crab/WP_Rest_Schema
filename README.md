@@ -74,13 +74,13 @@ $ composer require pinkcrab/wp-rest-schema
 | Boolean | `Boolean_Type` | *No type-specific methods* |
 | Null | `Null_Type` | *No type-specific methods* |
 | Array | `Array_Type` | `string_item()`, `integer_item()`, `min_items()`, `max_items()`, `unique_items()`, `any_of()`, `one_of()` |
-| Object | `Object_Type` | `string_property()`, `integer_property()`, `additional_properties()`, `pattern_properties()`, `min_properties()`, `max_properties()` |
+| Object | `Object_Type` | `string_property()`, `integer_property()`, `additional_properties()`, `pattern_properties()`, `min_properties()`, `max_properties()`, `required_properties()` |
 | OneOf | `One_Of_Type` | `variant( Argument )` — schema-root `oneOf` combinator (exactly one variant must match) |
 | AnyOf | `Any_Of_Type` | `variant( Argument )` — schema-root `anyOf` combinator (any variant matches) |
 
 > `Boolean_Type` and `Null_Type` inherit all shared methods from the base `Argument` class but have no additional type-specific methods. See [Argument](docs/Argument.md) for the full shared API.
 
-All types share a common set of methods for `description`, `default`, `required`, `readonly`, `title`, `format`, `expected` (enum), `context`, `validation`, `sanitization`, and `union types`. See [Argument (Base Class)](docs/Argument.md) for details.
+All types share a common set of methods for `description`, `default`, `required`, `readonly`, `title`, `format`, `expected` (enum, accepts mixed), `context`, `validation`, `sanitization`, `arg_options` (WP controller pass-through), and `union types`. See [Argument (Base Class)](docs/Argument.md) for details.
 
 ****
 
@@ -213,6 +213,6 @@ http://www.opensource.org/licenses/mit-license.html
 
 ## Change Log
 
-* 1.0.0 - Combinators (`One_Of_Type` / `Any_Of_Type`), null/falsy defaults, array items last-wins.
+* 1.0.0 - Combinators (`One_Of_Type` / `Any_Of_Type`), null/falsy defaults, array items last-wins, `arg_options`, `required_properties`, mixed enums; deprecated `name()` and `all_of()`.
 * 1.0.0-RC1 - Added Schema builder, readonly/title support, field() alias, for_route() helper, additionalProperties redesign, FORMAT_URI fix, PHPStan level 9, WPCS 3, PHP 8.0+/WP 6.6+
 * 0.1.0 - Initial version

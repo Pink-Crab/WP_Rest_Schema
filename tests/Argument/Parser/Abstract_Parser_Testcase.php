@@ -131,22 +131,30 @@ abstract class Abstract_Parser_Testcase extends WP_UnitTestCase {
 		);
 	}
 
-	/** @testdox When parsing the argument, the name should be listed if defined. */
+	/** @testdox name() is deprecated — calling it triggers E_USER_DEPRECATED and does not leak into the parsed output. */
 	public function test_name(): void {
-		$expected = array(
-			'arg-name' => array(
-				'type' => $this->type_name(),
-				'name' => 'some name',
-			),
+		$triggered = false;
+		set_error_handler(
+			function ( $errno ) use ( &$triggered ) {
+				if ( $errno === E_USER_DEPRECATED ) {
+					$triggered = true;
+					return true;
+				}
+				return false;
+			},
+			E_USER_DEPRECATED
 		);
 
 		$model = $this->type_class()::on( 'arg-name' )
 			->name( 'some name' );
 
-		$this->assertSame(
-			$expected,
-			Argument_Parser::as_array( $model )
-		);
+		restore_error_handler();
+
+		$this->assertTrue( $triggered, 'Expected ::name() to trigger E_USER_DEPRECATED.' );
+
+		// No `name` key should appear in the parsed output.
+		$parsed = Argument_Parser::as_array( $model );
+		$this->assertArrayNotHasKey( 'name', $parsed['arg-name'] );
 	}
 
 	/** @testdox When parsing the argument, the default should be listed if defined. */

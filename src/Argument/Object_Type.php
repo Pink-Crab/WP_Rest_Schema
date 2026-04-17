@@ -88,6 +88,40 @@ class Object_Type extends Argument {
 		return is_int( $value ) ? $value : null;
 	}
 
+	/**
+	 * Mark property names as required at the parent-object level.
+	 *
+	 * Emits JSON-Schema draft-04 style `required: ['a','b']` on the parsed
+	 * object schema. Matches the convention used by most WP core
+	 * `get_item_schema()` implementations. Coexists with per-property
+	 * `required: true` booleans.
+	 *
+	 * @param string ...$names  One or more property names to mark required.
+	 * @return self
+	 */
+	public function required_properties( string ...$names ): self {
+		return $this->add_attribute( 'required_properties', $names );
+	}
+
+	/**
+	 * Get the list of property names marked as required at the object level.
+	 *
+	 * @return array<int, string>
+	 */
+	public function get_required_properties(): array {
+		$value = $this->get_attribute( 'required_properties' );
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+		$names = array();
+		foreach ( $value as $name ) {
+			if ( is_string( $name ) ) {
+				$names[] = $name;
+			}
+		}
+		return $names;
+	}
+
 
 	/**
 	 * Regular Properties.
@@ -102,7 +136,7 @@ class Object_Type extends Argument {
 	 * @return static
 	 */
 	protected function add_property( string $name, string $type, ?callable $config = null ): self {
-		$item                      = $this->create_child( $name, $type )->name( $name );
+		$item                      = $this->create_child( $name, $type );
 		$this->properties[ $name ] = is_null( $config ) ? $item : $config( $item );
 		return $this;
 	}
@@ -268,7 +302,7 @@ class Object_Type extends Argument {
 	 * @return static
 	 */
 	protected function add_pattern_property( string $pattern, string $type, ?callable $config = null ): self {
-		$item                                 = $this->create_child( $pattern, $type )->name( $pattern );
+		$item                                 = $this->create_child( $pattern, $type );
 		$this->pattern_properties[ $pattern ] = is_null( $config ) ? $item : $config( $item );
 		return $this;
 	}

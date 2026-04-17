@@ -36,11 +36,9 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 				'properties' => array(
 					'foo' => array(
 						'type' => 'string',
-						'name' => 'foo',
 					),
 					'bar' => array(
 						'type' => 'boolean',
-						'name' => 'bar',
 					),
 				),
 			),
@@ -64,7 +62,6 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 				'properties' => array(
 					'foo' => array(
 						'type' => 'string',
-						'name' => 'foo',
 					),
 				),
 			),
@@ -143,7 +140,6 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 				'patternProperties' => array(
 					'^\\w+$' => array(
 						'type' => 'string',
-						'name' => '^\\w+$',
 					),
 				),
 			),
@@ -203,11 +199,9 @@ class Test_Object_Type_Parser extends Abstract_Parser_Testcase {
 					'oneOf' => array(
 						'foo' => array(
 							'type' => 'string',
-							'name' => 'foo',
 						),
 						'bar' => array(
 							'type' => 'integer',
-							'name' => 'bar',
 						),
 					),
 				),

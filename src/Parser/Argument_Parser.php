@@ -162,10 +162,6 @@ class Argument_Parser {
 			$attributes['format'] = $this->argument->get_format();
 		}
 
-		if ( ! is_null( $this->argument->get_name() ) ) {
-			$attributes['name'] = $this->argument->get_name();
-		}
-
 		if ( is_array( $this->argument->get_expected() ) && ! empty( $this->argument->get_expected() ) ) {
 			$attributes['enum'] = $this->argument->get_expected();
 		}
@@ -180,6 +176,10 @@ class Argument_Parser {
 
 		if ( ! is_null( $this->argument->get_title() ) ) {
 			$attributes['title'] = $this->argument->get_title();
+		}
+
+		if ( ! is_null( $this->argument->get_arg_options() ) ) {
+			$attributes['arg_options'] = $this->argument->get_arg_options();
 		}
 
 		return $attributes;
