@@ -10,6 +10,9 @@ A fluent PHP builder for WordPress REST API JSON schemas. Converts verbose neste
 [![WordPress 6.8 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_8.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_8.yaml)
 [![WordPress 6.9 Test Suite [PHP8.0-8.4]](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_9.yaml/badge.svg)](https://github.com/Pink-Crab/WP_Rest_Schema/actions/workflows/WP_6_9.yaml)
 
+[![codecov](https://codecov.io/gh/Pink-Crab/WP_Rest_Schema/graph/badge.svg?token=KER9nANRi2)](https://codecov.io/gh/Pink-Crab/WP_Rest_Schema)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Pink-Crab/WP_Rest_Schema/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Pink-Crab/WP_Rest_Schema/?branch=master)
+
 ****
 
 ## Why?
