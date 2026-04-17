@@ -190,6 +190,20 @@ class Schema {
 	}
 
 	/**
+	 * Mark property names as required at the parent-object level.
+	 *
+	 * Forwards to `Object_Type::required_properties()`. Emits a draft-4
+	 * style `required: ['a','b']` array in the parsed schema.
+	 *
+	 * @param string ...$names
+	 * @return static
+	 */
+	public function required_properties( string ...$names ): self {
+		$this->object->required_properties( ...$names );
+		return $this;
+	}
+
+	/**
 	 * Set additional properties (boolean or schema).
 	 *
 	 * @param bool $allowed
@@ -252,5 +266,42 @@ class Schema {
 		}
 
 		return $schema;
+	}
+
+	/**
+	 * Build the `context` collection param descriptor.
+	 *
+	 * Mirrors `WP_REST_Controller::get_context_param()`: derives the `enum` of
+	 * allowed contexts from the union of `context` values set on the schema's
+	 * properties, unique and reverse-sorted. Returns the standard param shape
+	 * (type/description/sanitize_callback/validate_callback) merged with any
+	 * caller-provided overrides.
+	 *
+	 * @param array<string, mixed> $args  Caller overrides merged on top.
+	 * @return array<string, mixed>
+	 */
+	public function get_context_param( array $args = array() ): array {
+		$param_details = array(
+			'description'       => 'Scope under which the request is made; determines fields present in response.',
+			'type'              => 'string',
+			'sanitize_callback' => 'sanitize_key',
+			'validate_callback' => 'rest_validate_request_arg',
+		);
+
+		$contexts = array();
+		foreach ( $this->object->get_properties() as $property ) {
+			$property_contexts = $property->get_context();
+			if ( ! empty( $property_contexts ) ) {
+				$contexts = array_merge( $contexts, $property_contexts );
+			}
+		}
+
+		if ( ! empty( $contexts ) ) {
+			$enum = array_values( array_unique( $contexts ) );
+			rsort( $enum );
+			$param_details['enum'] = $enum;
+		}
+
+		return array_merge( $param_details, $args );
 	}
 }

@@ -157,4 +157,69 @@ class Test_Schema extends WP_UnitTestCase {
 		$this->assertTrue( $schema['properties']['title']['required'] );
 		$this->assertEquals( array( 'publish', 'draft', 'pending' ), $schema['properties']['status']['enum'] );
 	}
+
+	/** @testdox to_array() passes through min/maxProperties and patternProperties from the internal Object_Type. */
+	public function test_to_array_emits_min_max_and_pattern_properties(): void {
+		$schema = Schema::on( 'settings' );
+		$schema->get_object()
+			->min_properties( 1 )
+			->max_properties( 10 )
+			->string_pattern_property( '^[a-z]+$' );
+
+		$array = $schema->to_array();
+
+		$this->assertSame( 1, $array['minProperties'] );
+		$this->assertSame( 10, $array['maxProperties'] );
+		$this->assertArrayHasKey( 'patternProperties', $array );
+		$this->assertArrayHasKey( '^[a-z]+$', $array['patternProperties'] );
+	}
+
+	/** @testdox number_property(), boolean_property(), null_property() forwarders register on the internal Object_Type. */
+	public function test_schema_forwarders_for_number_boolean_null_property(): void {
+		$schema = Schema::on( 'mix' )
+			->number_property( 'score' )
+			->boolean_property( 'active' )
+			->null_property( 'nothing' );
+
+		$props = $schema->get_object()->get_properties();
+		$this->assertArrayHasKey( 'score', $props );
+		$this->assertArrayHasKey( 'active', $props );
+		$this->assertArrayHasKey( 'nothing', $props );
+	}
+
+	/** @testdox get_context_param() returns the base param shape when no properties are set. */
+	public function test_get_context_param_without_properties(): void {
+		$schema = Schema::on( 'empty' );
+		$param  = $schema->get_context_param();
+
+		$this->assertSame( 'string', $param['type'] );
+		$this->assertArrayHasKey( 'description', $param );
+		$this->assertArrayHasKey( 'sanitize_callback', $param );
+		$this->assertArrayHasKey( 'validate_callback', $param );
+		$this->assertArrayNotHasKey( 'enum', $param );
+	}
+
+	/** @testdox get_context_param() derives enum from the union of property contexts, unique and reverse-sorted. */
+	public function test_get_context_param_derives_enum_from_properties(): void {
+		$schema = Schema::on( 'post' )
+			->integer_property( 'id', fn( $p ) => $p->context( 'view', 'edit', 'embed' ) )
+			->string_property( 'title', fn( $p ) => $p->context( 'view', 'edit' ) )
+			->string_property( 'content', fn( $p ) => $p->context( 'view' ) );
+
+		$param = $schema->get_context_param();
+
+		$this->assertArrayHasKey( 'enum', $param );
+		$this->assertSame( array( 'view', 'embed', 'edit' ), $param['enum'] );
+	}
+
+	/** @testdox get_context_param() merges caller-provided args on top of the defaults. */
+	public function test_get_context_param_merges_caller_args(): void {
+		$schema = Schema::on( 'post' )
+			->string_property( 'title', fn( $p ) => $p->context( 'view', 'edit' ) );
+
+		$param = $schema->get_context_param( array( 'default' => 'view' ) );
+
+		$this->assertSame( 'view', $param['default'] );
+		$this->assertSame( array( 'view', 'edit' ), $param['enum'] );
+	}
 }

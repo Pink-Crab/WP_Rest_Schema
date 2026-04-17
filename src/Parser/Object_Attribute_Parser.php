@@ -69,6 +69,12 @@ class Object_Attribute_Parser extends Abstract_Parser {
 			$attributes['maxProperties'] = $argument->get_max_properties();
 		}
 
+		// Parent-level required property names (draft-4 style array).
+		$required_names = $argument->get_required_properties();
+		if ( ! empty( $required_names ) ) {
+			$attributes['required'] = $required_names;
+		}
+
 		return $attributes;
 	}
 

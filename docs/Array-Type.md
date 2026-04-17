@@ -91,6 +91,15 @@ $custom = String_Type::field( 'value' )->min_length( 1 );
 $list = Array_Type::field( 'items' )->item( $custom );
 ```
 
+### Multiple item calls — last wins or combinator
+
+WP treats `items` as a SINGLE schema applied to every element; JSON Schema tuple form is not honoured. The library therefore handles repeated `*_item()` calls as follows:
+
+- **No combinator set (default `allOf`):** the LAST-added item wins and `items` is emitted as a single schema. Prior item calls are discarded.
+- **Combinator set (`one_of()` / `any_of()`):** all item schemas are kept and emitted as a list under the combinator key, producing valid WP output such as `'items' => [ 'oneOf' => [ {schemaA}, {schemaB} ] ]`.
+
+For heterogeneous arrays at the SCHEMA ROOT (not nested inside `items`), use [`One_Of_Type`](Argument.md#combinators-vs-unions--one_of_type--any_of_type) / [`Any_Of_Type`](Argument.md#combinators-vs-unions--one_of_type--any_of_type) instead.
+
 ---
 
 ## Constraint Methods

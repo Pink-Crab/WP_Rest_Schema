@@ -165,15 +165,36 @@ $obj = Object_Type::field( 'settings' )
     ->max_properties( 10 );
 ```
 
+### `required_properties( string ...$names ): self`
+
+Mark specific property names as required at the parent-object level, producing the draft-4 style `required: ['a','b']` array used by most WP core `get_item_schema()` implementations.
+
+```php
+$obj = Object_Type::field( 'user' )
+    ->integer_property( 'id' )
+    ->string_property( 'email' )
+    ->string_property( 'nickname' )
+    ->required_properties( 'id', 'email' );
+
+// Emits:
+// ['user' => [
+//     'type'       => 'object',
+//     'properties' => [ 'id' => [...], 'email' => [...], 'nickname' => [...] ],
+//     'required'   => [ 'id', 'email' ],
+// ]]
+```
+
+Coexists with per-property `->required(true)` booleans — both forms are honoured by WP and may appear side-by-side if both are set.
+
 ---
 
 ## Element Relationships
 
 Control how properties relate to each other. The default relationship is `allOf`.
 
-### `all_of(): self`
+### ~~`all_of(): self`~~ *(deprecated)*
 
-All property schemas must match (default).
+> **Deprecated in 1.0.0** — no-op. `allOf` is already the default relationship, and WP's REST validator does not honour `allOf` as a combinator anyway. Use `one_of()` / `any_of()` or the root-level [`One_Of_Type` / `Any_Of_Type`](Argument.md#combinators-vs-unions--one_of_type--any_of_type) classes instead.
 
 ### `any_of(): self`
 

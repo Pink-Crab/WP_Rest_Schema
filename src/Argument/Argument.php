@@ -108,9 +108,30 @@ class Argument {
 	/**
 	 * The default value
 	 *
-	 * @var string|int|float|bool|null
+	 * @var string|int|float|bool|array<mixed>|object|null
 	 */
 	protected $default;
+
+	/**
+	 * Whether a default has been explicitly set.
+	 *
+	 * Tracks the set-ness separately from the value so that null can be
+	 * emitted as a default (valid when type includes 'null').
+	 *
+	 * @var bool
+	 */
+	protected $has_default_set = false;
+
+	/**
+	 * Raw arg_options pass-through for WP REST controllers.
+	 *
+	 * Emitted verbatim in the parsed output under the `arg_options` key so
+	 * controllers can override `sanitize_callback` / `validate_callback` per
+	 * property. See `WP_REST_Controller::add_additional_fields_schema()`.
+	 *
+	 * @var array<string, mixed>|null
+	 */
+	protected $arg_options;
 
 	/**
 	 * Optional format to expect value.
@@ -120,9 +141,13 @@ class Argument {
 	protected $format;
 
 	/**
-	 * Enum of all accepted values
+	 * Enum of all accepted values.
 	 *
-	 * @var array<string|float|int|bool>|null
+	 * WP compares enum entries via `in_array(..., $enum, true)` so any
+	 * JSON-comparable value is valid — including `null`, arrays, and objects
+	 * for schemas whose `type` accommodates them.
+	 *
+	 * @var array<int, mixed>|null
 	 */
 	protected $expected;
 
@@ -204,7 +229,7 @@ class Argument {
 	 * @return static
 	 */
 	public function validation( callable $validation ): self {
-		$this->validation = $validation; // @phpstan-ignore assign.propertyType
+		$this->validation = $validation;
 		return $this;
 	}
 
@@ -233,7 +258,7 @@ class Argument {
 	/**
 	 * Get the default value
 	 *
-	 * @return string|int|float|bool|null
+	 * @return string|int|float|bool|array<mixed>|object|null
 	 */
 	public function get_default() {
 		return $this->default;
@@ -245,17 +270,18 @@ class Argument {
 	 * @return bool
 	 */
 	public function has_default(): bool {
-		return ! is_null( $this->default );
+		return $this->has_default_set;
 	}
 
 	/**
 	 * Set the default value
 	 *
-	 * @param string|int|float|bool $default_value  The default value
+	 * @param string|int|float|bool|array<mixed>|object|null $default_value  The default value
 	 * @return static
 	 */
 	public function default( $default_value ): self {
-		$this->default = $default_value;
+		$this->default         = $default_value;
+		$this->has_default_set = true;
 		return $this;
 	}
 
@@ -421,24 +447,26 @@ class Argument {
 	/**
 	 * Get expected of all accepted values
 	 *
-	 * @return array<string|float|int|bool>|null
+	 * @return array<int, mixed>|null
 	 */
 	public function get_expected(): ?array {
 		return $this->expected;
 	}
 
 	/**
-	 * Set expected of all accepted values
+	 * Set expected of all accepted values.
 	 *
-	 * @param mixed ...$expected  Accept value for argument.
+	 * Any JSON-comparable value is accepted (null, arrays, objects included)
+	 * since WP compares enum entries with `in_array(..., $enum, true)`.
+	 *
+	 * @param mixed ...$expected  Accepted values for the argument.
 	 * @return static
 	 */
 	public function expected( ...$expected ): self {
-		/** @var array<bool|float|int|string> $merged */
 		$merged         = is_array( $this->expected )
 			? array_merge( $this->expected, $expected )
 			: $expected;
-		$this->expected = $merged;
+		$this->expected = array_values( $merged );
 		return $this;
 	}
 
@@ -453,13 +481,26 @@ class Argument {
 	}
 
 	/**
-	 * Sets the max length of the value
+	 * No-op setter kept for backwards compatibility.
 	 *
-	 * @param string $name
+	 * `name` is not in `rest_get_allowed_schema_keywords()` and was leaking
+	 * from the internal child-indexing machinery into the parsed output.
+	 * Calling this method now triggers an `E_USER_DEPRECATED` notice and
+	 * does nothing.
+	 *
+	 * @deprecated 1.0.0 Removed from schema output. Will be removed in a
+	 *                   future release.
+	 *
+	 * @param string $name  Ignored.
 	 * @return static
 	 */
-	public function name( string $name ): self {
-		return $this->add_attribute( 'name', $name );
+	public function name( string $name ): self { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found
+		// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
+		trigger_error(
+			'Argument::name() is deprecated and no longer affects schema output. It will be removed in a future release.',
+			E_USER_DEPRECATED
+		);
+		return $this;
 	}
 
 
@@ -520,6 +561,30 @@ class Argument {
 	 */
 	public function title( string $title ): self {
 		$this->title = $title;
+		return $this;
+	}
+
+	/**
+	 * Get the raw arg_options pass-through array.
+	 *
+	 * @return array<string, mixed>|null
+	 */
+	public function get_arg_options(): ?array {
+		return $this->arg_options;
+	}
+
+	/**
+	 * Set arg_options for WP REST controller pass-through.
+	 *
+	 * The array is emitted verbatim under the `arg_options` key in the parsed
+	 * schema, allowing controllers to override `sanitize_callback` /
+	 * `validate_callback` or any other WP arg option per-property.
+	 *
+	 * @param array<string, mixed> $options  Raw arg_options array to attach.
+	 * @return static
+	 */
+	public function arg_options( array $options ): self {
+		$this->arg_options = $options;
 		return $this;
 	}
 }

@@ -62,18 +62,15 @@ class Test_Array_Type_Parser extends Abstract_Parser_Testcase {
 
 	}
 
-	/**  @testdox It should be possible to allow multiple types of an arrays contents. */
-	public function test_multiple_types(): void {
+	/**
+	 * @testdox When multiple item types are added, the last one wins and items is emitted as a single schema (WP does not honour tuple-form items).
+	 */
+	public function test_multiple_item_calls_last_wins(): void {
 		$expected = array(
 			'arg-name' => array(
 				'type'  => 'array',
 				'items' => array(
-					array(
-						'type' => 'string',
-					),
-					array(
-						'type' => 'null',
-					),
+					'type' => 'null',
 				),
 			),
 		);
@@ -81,6 +78,29 @@ class Test_Array_Type_Parser extends Abstract_Parser_Testcase {
 		$model = Array_Type::on( 'arg-name' )
 			->string_item()
 			->null_item();
+
+		$this->assertSame(
+			$expected,
+			Argument_Parser::as_array( $model )
+		);
+	}
+
+	/** @testdox A three-way tuple collapses to the last-added item schema. */
+	public function test_three_item_calls_last_wins(): void {
+		$expected = array(
+			'arg-name' => array(
+				'type'  => 'array',
+				'items' => array(
+					'type'    => 'integer',
+					'minimum' => 1,
+				),
+			),
+		);
+
+		$model = Array_Type::on( 'arg-name' )
+			->string_item()
+			->null_item()
+			->integer_item( fn( $i ) => $i->minimum( 1 ) );
 
 		$this->assertSame(
 			$expected,
@@ -123,10 +143,8 @@ class Test_Array_Type_Parser extends Abstract_Parser_Testcase {
 				'type'  => 'array',
 				'items' => array(
 					'type'  => 'array',
-					'name'  => '1st',
 					'items' => array(
 						'type'  => 'array',
-						'name'  => '2nd',
 						'items' => array(
 							'type' => 'string',
 						),
@@ -139,11 +157,9 @@ class Test_Array_Type_Parser extends Abstract_Parser_Testcase {
 			->array_item(
 				function( Array_Type $first_generation ): Array_Type {
 					return $first_generation
-						->name( '1st' )
 						->array_item(
 							function ( Array_Type $second_generation ): Array_Type {
 								return $second_generation
-									->name( '2nd' )
 									->string_item();
 							}
 						);

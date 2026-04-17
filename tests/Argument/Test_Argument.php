@@ -131,6 +131,91 @@ class Test_Argument extends WP_UnitTestCase {
 		$this->assertEquals( 'DEF', $argument->get_default() );
 	}
 
+	/** @testdox Setting a default of false should count as a default being set and should be retrievable. */
+	public function test_default_false_is_tracked_as_set(): void {
+		$argument = new Argument( 'flag' );
+		$argument->default( false );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertSame( false, $argument->get_default() );
+	}
+
+	/** @testdox Setting a default of 0 should count as a default being set and should be retrievable. */
+	public function test_default_zero_is_tracked_as_set(): void {
+		$argument = new Argument( 'count' );
+		$argument->default( 0 );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertSame( 0, $argument->get_default() );
+	}
+
+	/** @testdox Setting a default of an empty string should count as a default being set and should be retrievable. */
+	public function test_default_empty_string_is_tracked_as_set(): void {
+		$argument = new Argument( 'label' );
+		$argument->default( '' );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertSame( '', $argument->get_default() );
+	}
+
+	/** @testdox Setting a default of null should count as a default being set and should be retrievable (for unions that include null). */
+	public function test_default_null_is_tracked_as_set(): void {
+		$argument = new Argument( 'optional' );
+		$argument->default( null );
+		$this->assertTrue( $argument->has_default() );
+		$this->assertNull( $argument->get_default() );
+	}
+
+	/** @testdox expected() should accept null as a valid enum value (WP uses in_array strict which accepts null). */
+	public function test_expected_accepts_null(): void {
+		$argument = new Argument( 'status' );
+		$argument->expected( 'active', 'inactive', null );
+		$this->assertSame( array( 'active', 'inactive', null ), $argument->get_expected() );
+	}
+
+	/** @testdox expected() should accept array values as enum entries (for array-typed schemas). */
+	public function test_expected_accepts_arrays(): void {
+		$argument = new Argument( 'preset' );
+		$argument->expected( array( 'a', 'b' ), array( 'c', 'd' ) );
+		$this->assertSame( array( array( 'a', 'b' ), array( 'c', 'd' ) ), $argument->get_expected() );
+	}
+
+	/** @testdox arg_options() should store and return a raw array for WP controller pass-through. */
+	public function test_arg_options_setter_and_getter(): void {
+		$argument = new Argument( 'id' );
+		$this->assertNull( $argument->get_arg_options() );
+		$argument->arg_options(
+			array(
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'is_numeric',
+			)
+		);
+		$this->assertSame(
+			array(
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'is_numeric',
+			),
+			$argument->get_arg_options()
+		);
+	}
+
+	/** @testdox arg_options() values should be emitted verbatim in the parsed output. */
+	public function test_arg_options_emitted_in_parser_output(): void {
+		$expected = array(
+			'id' => array(
+				'type'        => 'string',
+				'arg_options' => array(
+					'sanitize_callback' => 'absint',
+				),
+			),
+		);
+
+		$model = String_Type::on( 'id' )
+			->arg_options( array( 'sanitize_callback' => 'absint' ) );
+
+		$this->assertSame(
+			$expected,
+			\PinkCrab\WP_Rest_Schema\Parser\Argument_Parser::as_array( $model )
+		);
+	}
+
 	/** @testdox It should be possible to set a description to an argument. */
 	public function test_argument_description(): void {
 		$argument = new Argument( 'id' );
@@ -232,14 +317,36 @@ class Test_Argument extends WP_UnitTestCase {
 		$this->assertSame( $types, $caught );
 	}
 
-	/** @testdox It should be possible to give an argument a name and get the name. */
-	public function test_name(): void {
+	/** @testdox name() is deprecated — calling it triggers an E_USER_DEPRECATED notice. */
+	public function test_name_setter_is_deprecated(): void {
 		$argument = new Argument( 'id' );
 
-		$this->assertNull( $argument->get_name() );
+		$triggered = false;
+		set_error_handler(
+			function ( $errno ) use ( &$triggered ) {
+				if ( $errno === E_USER_DEPRECATED ) {
+					$triggered = true;
+					return true;
+				}
+				return false;
+			},
+			E_USER_DEPRECATED
+		);
 
-		$argument->name( 'name it' );
-		$this->assertEquals( 'name it', $argument->get_name() );
+		$argument->name( 'anything' );
+
+		restore_error_handler();
+
+		$this->assertTrue( $triggered, 'Expected Argument::name() to trigger E_USER_DEPRECATED.' );
+	}
+
+	/** @testdox name() is a no-op — the value is not stored and get_name() still returns null. */
+	public function test_name_setter_is_no_op(): void {
+		$argument = new Argument( 'id' );
+
+		@$argument->name( 'ignored' );
+
+		$this->assertNull( $argument->get_name() );
 	}
 
 	/** @testdox It should be possible to set and get the arguments, attributes as arrays. */

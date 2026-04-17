@@ -23,7 +23,12 @@ trait Element_Requirements {
 	protected $relationship = 'allOf';
 
 	/**
-	 * Sets if all of the elements are present.
+	 * Sets the relationship to 'allOf'.
+	 *
+	 * @deprecated 1.0.0 No-op. `allOf` is already the default relationship, and
+	 *                   WP's REST validator does not honour `allOf` as a
+	 *                   combinator anyway. Use `one_of()` / `any_of()` or the
+	 *                   dedicated `One_Of_Type` / `Any_Of_Type` classes.
 	 *
 	 * @return self
 	 */
